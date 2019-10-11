@@ -1,0 +1,31 @@
+{% load static %}<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'hipbone/css/housing-portal-basic-style.css' %}">
+    {% block stylesheet %}{% endblock %}
+  </head>
+  <body>
+    <header>
+      <span class="user">
+        {% if request.user.is_authenticated %}
+          Logged in as {{ request.user.username }}.
+          <a href="{% url "logout" %}">Log out</a>.
+        {% else %}
+          <a href="{% url "login" %}">Log in</a>.
+        {% endif %}
+      </span>
+    </header>
+    <main>
+      <div id="content">
+          {% block content %}
+          {% endblock %}
+      </div>
+    </main>
+    <footer>
+        Send us feedback about this tool through our <a href="https://datadrivendetroit.org/askd3/">AskD3 site</a>.
+    </footer>
+    {% block javascript %}{% endblock %}
+  </body>
+</html>

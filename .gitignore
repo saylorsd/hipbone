@@ -1,0 +1,7 @@
+*.swp
+*.sqlite3
+*.pyc
+*/__pycache__
+TODO
+INSTALL_NOTES
+migrations/
