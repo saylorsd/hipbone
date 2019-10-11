@@ -14,7 +14,7 @@ from .tracking_util import save_activity
 
 from django.contrib.auth.decorators import login_required
 
-from icecream import ic
+#from icecream import ic
 
 def user_login(request):
     if request.method == 'POST':
