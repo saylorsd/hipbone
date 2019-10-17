@@ -49,7 +49,8 @@ class IndexView(View):
         self.parcel_data = {}
         self.context = { 'parcel_id': self.parcel_id,
                 'parcel_data': self.parcel_data,
-                'msg': self.msg
+                'msg': self.msg,
+                'error_message': ''
             }
 
     def get(self, request, *args, **kwargs):
@@ -59,6 +60,7 @@ class IndexView(View):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+        error_message = ''
         if form.is_valid():
             # The form fields passed validation
             search_type = request.POST.get('search_type')
