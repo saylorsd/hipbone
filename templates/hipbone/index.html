@@ -11,7 +11,9 @@
     <div>
         <span>
             {{ address_form.address.errors }}
-            <b>Address:</b> {{ address_form.address }}<br>
+            <b>Address:</b> {{ address_form.address }}
+            <input type="radio" name="search_type" value="address" checked="checked">Search by address
+            <input type="radio" name="search_type" value="parcel">Search by parcel ID<br>
         </span>
     </div>
 </form>

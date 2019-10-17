@@ -61,18 +61,22 @@ class IndexView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             # The form fields passed validation
-            cd = form.cleaned_data
-            address = cd['address']
-            url = "https://tools.wprdc.org/geo/geocode?addr={}".format(address)
-            response = requests.get(url)
-            json_response = response.json()
-            if 'data' in json_response:
-                json_data = json_response['data']
-                if 'parcel_id' in json_data:
-                    self.parcel_id = json_data['parcel_id']
-                    if 'regions' in json_data and 'us_census_tract' in json_data['regions']:
-                        if 'name' in json_data['regions']['us_census_tract']:
-                            self.parcel_data['census_tract'] = json_data['regions']['us_census_tract']['name']
+            search_type = request.POST.get('search_type')
+            if search_type == 'address':
+                cd = form.cleaned_data
+                address = cd['address']
+                url = "https://tools.wprdc.org/geo/geocode?addr={}".format(address)
+                response = requests.get(url)
+                json_response = response.json()
+                if 'data' in json_response:
+                    json_data = json_response['data']
+                    if 'parcel_id' in json_data:
+                        self.parcel_id = json_data['parcel_id']
+                        if 'regions' in json_data and 'us_census_tract' in json_data['regions']:
+                            if 'name' in json_data['regions']['us_census_tract']:
+                                self.parcel_data['census_tract'] = json_data['regions']['us_census_tract']['name']
+            else:
+                self.msg = 'Search by parcel ID is not yet supported'
 
         self.context = { 'address_form': form,
                 'parcel_id': self.parcel_id,
