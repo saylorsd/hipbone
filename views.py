@@ -14,7 +14,7 @@ from .tracking_util import save_activity
 
 from django.contrib.auth.decorators import login_required
 
-#from icecream import ic
+from icecream import ic
 
 def user_login(request):
     if request.method == 'POST':
@@ -61,6 +61,7 @@ class IndexView(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         error_message = ''
+        address = None
         if form.is_valid():
             # The form fields passed validation
             search_type = request.POST.get('search_type')
@@ -93,6 +94,7 @@ class IndexView(View):
                             self.parcel_data['census_tract'] = json_results['us_census_tract']['name']
 
         self.context = { 'address_form': form,
+                'address': address if address is not None else None,
                 'parcel_id': self.parcel_id,
                 'parcel_data': self.parcel_data,
                 'msg': self.msg,
