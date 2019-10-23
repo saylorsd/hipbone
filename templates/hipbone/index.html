@@ -37,7 +37,10 @@
         {% endif %}
         <form method="post" action="pdf/">
             {% csrf_token %}
-            <!--input type="submit" id="download_as_pdf" value="Save as PDF"-->
+            <input type="hidden" name="address" value="{{ address }}" />
+            <input type="hidden" name="parcel_id" value="{{ parcel_id }}" />
+            <input type="hidden" name="parcel_data" value="{{ parcel_data }}" />
+            <input type="submit" id="download_as_pdf" value="Save as PDF">
         </form>
     </div>
 {% endif %}
