@@ -1,0 +1,19 @@
+{% if parcel_id is not none and parcel_id != '' %}
+    <div id="info">
+        <h1>parcel ID:</h1> {{ parcel_id }}
+        {% if parcel_data|length %}
+            <br><br>
+            {% for key, value in parcel_data.items %}
+                <h1>{{ key }}:</h1> {{ value }}
+            {% endfor %}
+        {% endif %}
+        <form method="post" action="pdf/">
+            {% csrf_token %}
+            <input type="hidden" name="address" value="{{ address }}" />
+            <input type="hidden" name="parcel_id" value="{{ parcel_id }}" />
+            <input type="hidden" name="parcel_data" value="{{ parcel_data }}" />
+            <input type="hidden" name="search_type" value="{{ search_type }}" />
+            <input type="submit" id="download_as_pdf" value="Save as PDF">
+        </form>
+    </div>
+{% endif %}
