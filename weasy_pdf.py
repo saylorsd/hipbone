@@ -2,7 +2,7 @@
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from weasyprint import HTML
-import tempfile
+import re, json, tempfile
 
 from .views import AddressForm
 
@@ -13,9 +13,11 @@ def generate_pdf(request):
     # Collect the information to be included in the template.
     address = request.POST.get('address', None)
     parcel_id = request.POST.get('parcel_id', None)
-    parcel_data = request.POST.get('parcel_data', {})
+    parcel_data = request.POST.get('parcel_data', '{}')
+    parcel_data = json.loads(re.sub("'", '"', parcel_data))
     data = {
         'address_form': AddressForm,
+        'search_type': request.POST.get('search_type', None),
         'address': address,
         'parcel_id': parcel_id,
         'parcel_data': parcel_data,
@@ -25,7 +27,7 @@ def generate_pdf(request):
     # Render the HTML
     html_string = render_to_string('hipbone/index.html', data)
     html = HTML(string=html_string)
-    result = html.write_pdf()
+    result = html.write_pdf(presentational_hints=True)
 
     # Create the HTTP response
     response = HttpResponse(content_type='application/pdf;')
