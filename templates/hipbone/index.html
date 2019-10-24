@@ -31,9 +31,11 @@
 {% if parcel_id is not none and parcel_id != '' %}
     <div id="info">
         <h1>parcel ID:</h1> {{ parcel_id }}
-        {% if 'census_tract' in parcel_data %}
+        {% if parcel_data|length %}
             <br><br>
-            <h1>Census Tract:</h1> {{ parcel_data.census_tract }}
+            {% for key, value in parcel_data.items %}
+                <h1>{{ key }}:</h1> {{ value }}
+            {% endfor %}
         {% endif %}
         <form method="post" action="pdf/">
             {% csrf_token %}

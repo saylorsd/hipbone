@@ -85,13 +85,13 @@ class IndexView(View):
                         self.parcel_id = json_data['parcel_id']
                         if 'regions' in json_data and 'us_census_tract' in json_data['regions']:
                             if 'name' in json_data['regions']['us_census_tract']:
-                                self.parcel_data['census_tract'] = json_data['regions']['us_census_tract']['name']
+                                self.parcel_data['Census tract'] = json_data['regions']['us_census_tract']['name']
                 elif 'results' in json_response: # Parse results of parcel ID lookup
                     json_results = json_response['results']
                     self.parcel_id = parcel_id
                     if 'us_census_tract' in json_results:
                         if 'name' in json_results['us_census_tract']:
-                            self.parcel_data['census_tract'] = json_results['us_census_tract']['name']
+                            self.parcel_data['Census tract'] = json_results['us_census_tract']['name']
 
         self.context = { 'address_form': form,
                 'address': address if address is not None else None,
