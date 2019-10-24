@@ -25,9 +25,10 @@ def generate_pdf(request):
     }
 
     # Render the HTML
-    html_string = render_to_string('hipbone/index.html', data)
+    html_string = render_to_string('hipbone/index.html', context = data)
     html = HTML(string=html_string)
-    result = html.write_pdf(presentational_hints=True)
+    stylesheets = ['https://tools.wprdc.org/static/hipbone/css/housing-portal-basic-style.css'] # Hard-code list of CSS stylesheets for now.
+    result = html.write_pdf(stylesheets=stylesheets, presentational_hints=True)
 
     # Create the HTTP response
     response = HttpResponse(content_type='application/pdf;')
