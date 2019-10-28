@@ -2,7 +2,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
-#from django_weasyprint import WeasyTemplateResponseMixin
 from django.conf import settings
 
 from .forms import LoginForm, AddressForm
@@ -102,14 +101,3 @@ class IndexView(View):
             }
         post_response = render(request, self.template_name, self.context)
         return post_response
-
-
-#class IndexPrintView(WeasyTemplateResponseMixin, IndexView):
-#    # Output of IndexView rendered as PDF with hardcoded CSS
-#    pdf_stylesheets = [
-#        settings.STATIC_URL + 'css/housing-portal-basic-style.css',
-#    ]
-#    # Show PDF in-line (default: True, show download dialog)
-#    pdf_attachment = False
-#    # suggested filename (is required for attachment!)
-#    pdf_filename = 'cookies.pdf'
