@@ -20,8 +20,8 @@ def user_login(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-#            user = authenticate(request, # Django 2.2
-            user = authenticate(          # Django 1.10
+            user = authenticate(request, # Django 2.2
+#            user = authenticate(          # Django 1.10
                                 username=cd['username'],
                                 password=cd['password'])
             if user is not None:
@@ -53,7 +53,7 @@ class IndexView(View):
             }
 
     def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated():                        # Use these two lines
+        if not request.user.is_authenticated:                        # Use these two lines
             return redirect('%s?next=%s' % ('/hipbone/login/', request.path))  # to make the report generator private.
 
         form = self.form_class()
