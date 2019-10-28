@@ -93,6 +93,7 @@ class IndexView(View):
                             self.parcel_data['Census tract'] = json_results['us_census_tract']['name']
 
         self.context = { 'address_form': form,
+                'search_type': search_type,
                 'address': address if address is not None else None,
                 'parcel_id': self.parcel_id,
                 'parcel_data': self.parcel_data,
