@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
 from django.conf import settings
@@ -53,6 +53,9 @@ class IndexView(View):
             }
 
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():                        # Use these two lines
+            return redirect('%s?next=%s' % ('/hipbone/login/', request.path))  # to make the report generator private.
+
         form = self.form_class()
         self.context['address_form'] = form
         return render(request, self.template_name, self.context)
