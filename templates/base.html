@@ -4,6 +4,31 @@
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'hipbone/css/housing-portal-basic-style.css' %}">
+    <style>
+    /* Footer CSS-Grid CSS */
+    .wrapper {
+      display: grid;
+      grid-template-columns: 66% 17% 17%;
+      grid-gap: 10px;
+      background-color: #fff;
+      color: #444;
+    }
+
+    .box {
+      background-color: #fff;
+      color: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      font-size: 100%;
+    }
+
+    .autosize {
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+    }
+    /* END Footer CSS-Grid CSS */
+    </style>
     {% block stylesheet %}{% endblock %}
   </head>
   <body>
@@ -25,7 +50,13 @@
     </main>
     <footer>
         <div id="footer">
-            Send us feedback about this tool through our <a href="https://datadrivendetroit.org/askd3/">AskD3 site</a>.
+            <div class="wrapper">
+                <div class="box a">{% block footer_message %}
+                Send us feedback about this tool through our <a href="https://datadrivendetroit.org/askd3/">AskD3 site</a>.
+                {% endblock %}</div>
+                <div class="box b"><img class="autosize" src="{% static 'hipbone/images/D3_logo.png' %}"></div>
+                <div class="box c"><img class="autosize" src="{% static 'hipbone/images/ask-d3-logo.png' %}"></div>
+            </div>
         </div>
     </footer>
     {% block javascript %}{% endblock %}

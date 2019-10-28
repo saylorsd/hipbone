@@ -1,13 +1,95 @@
 {% extends "base.html" %}
 
+{% block stylesheet %}
+<style>
+body {
+    position: relative;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
+}
+
+#form-wrapper {
+    width: 80%;           /* Set this to your convenience */
+    height: 20rem;          /* Set this to your convenience */
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  background-color: #2f2f2f;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+{% endblock %}
+
 {% block title %}Log in{% endblock %}
 
 {% block content %}
-  <h1>Log in</h1>
-  <p>Please, use the following form to log in:</p>
-  <form action="." method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <p><input type="submit" value="Log in"></p>
-  </form>
+
+  <h1>Log in to search for a specific property</h1>
+  <div id="form-wrapper" class="center">
+      <form action="." method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="LOG IN"></p>
+      </form>
+{% endblock %}
+{% block footer_message %}
 {% endblock %}
