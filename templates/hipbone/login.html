@@ -9,7 +9,7 @@ body {
 .center {
   margin: auto;
   width: 50%;
-  border: 3px solid green;
+  border: 0px solid black;
   padding: 10px;
 }
 
@@ -93,10 +93,12 @@ span.psw {
 
 {% block title %}Log in{% endblock %}
 
-{% block content %}
+{% block login-status %}
+{% endblock  %}
 
-<h1>Log in to search for a specific property</h1>
+{% block content %}
 <div class="login-image">
+    <h1 class="center">Log in to search for a specific property</h1>
     <div id="form-wrapper" class="center">
         <form action="." method="post">
         {% csrf_token %}

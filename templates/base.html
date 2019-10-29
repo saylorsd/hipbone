@@ -31,17 +31,24 @@
     </style>
     {% block stylesheet %}{% endblock %}
   </head>
-  <body>
-    <header>
-      <span class="user">
-        {% if request.user.is_authenticated %}
-          Logged in as {{ request.user.username }}.
-          <a href="{% url "logout" %}">Log out</a>.
-        {% else %}
-          <a href="{% url "login" %}">Log in</a>.
-        {% endif %}
-      </span>
-    </header>
+    <body>
+        <header>
+            <div id="header">
+                <span class="user">
+                {% block login-status %}
+                    {% if request.user.is_authenticated %}
+                        Logged in as {{ request.user.username }}.
+                        <a href="{% url "logout" %}">Log out</a>.
+                    {% else %}
+                        <a href="{% url "login" %}">Log in</a>.
+                    {% endif %}
+                <P></P>
+                <P></P>
+                {% endblock %}
+                <a href="/">HOUSING INFORMATION PORTAL</a>
+                </span>
+            </div>
+        </header>
     <main>
       <div id="content">
           {% block content %}

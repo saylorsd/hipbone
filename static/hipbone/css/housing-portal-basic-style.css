@@ -71,11 +71,11 @@ p { font-family: Poppins, Arial, sans-serif; font-size:14px;}
 /*Section 1: Title/Header*/
 #header {
 	padding: 40px;
-	background-color: #ecba66;
-	color: #2f2f2f;
+	background-color: #2f2f2f;
+	color: #00698c;
 } 
 
-#header a:link, a:visited {color: #2f2f2f; text-decoration:underline;}
+#header a:link, a:visited {color: #00698c; text-decoration:underline;}
 #header a:hover {color: #ffffff;}
 
 /*Section 2: Map Tools*/
