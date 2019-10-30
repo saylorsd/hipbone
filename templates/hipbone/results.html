@@ -1,11 +1,11 @@
 {% if parcel_id is not none and parcel_id != '' %}
     {% if parcels|length == 1 %} {# Show selected result #}
-        <div id="info">
-            <div id="result-box" style="border: 1px solid black">
+        <div id="single-parcel-results">
+            <div id="orange-result-box" style="border: 3px solid orange">
             {% for parcel in parcels  %}
-                <h1>parcel ID:</h1> {{ parcel.parcel_id }}
+                <span class="bold">Parcel ID:</span> {{ parcel.parcel_id }}<br>
                 {% for key, value in parcel.parcel_data.items %}
-                    <h1>{{ key }}:</h1> {{ value }}
+                    <span class="bold">{{ key }}:</span> {{ value }}<br>
                 {% endfor %}
             {% endfor %}
             </div>
