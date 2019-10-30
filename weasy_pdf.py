@@ -21,7 +21,7 @@ def generate_pdf(request):
         'address': address,
         'parcel_id': parcel_id,
         'parcel_data': parcel_data,
-        'msg': "Voila! PDF output!"
+        'msg': ""
     }
 
     # Render the HTML
