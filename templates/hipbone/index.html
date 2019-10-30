@@ -8,6 +8,9 @@
     background-color: #ffffff;
     color: red;
 }
+#id_address {
+    width: 80%
+}
 </style>
 {% endblock %}
 
@@ -18,10 +21,10 @@
 <form method="post">
     {% csrf_token %}
     {{ address_form.non_field_errors }}
-    <div>
+    <div class="center">
+        {{ address_form.address.errors }}<br>
+        {{ address_form.address }}<br>
         <span>
-            {{ address_form.address.errors }}
-            <b>Address:</b> {{ address_form.address }}
             <input type="radio" name="search_type" value="address" checked="checked">Search by address
             <input type="radio" name="search_type" value="parcel">Search by parcel ID<br>
         </span>
