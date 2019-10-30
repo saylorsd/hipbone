@@ -11,25 +11,37 @@
 #id_address {
     width: 80%
 }
+
+/* Background image */
+.background-image {
+  width: 100%;
+  height: 40vh;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-image: url(/static/hipbone/images/search-header_house-search.png);
+}
 </style>
 {% endblock %}
 
 {% block content %}
-<h2 class="center">Search by parcel ID or address</h2>
-<div><p>{{ msg }}</p></div>
-<div id="error"><p>{{ error_message }}</p></div>
-<form method="post">
-    {% csrf_token %}
-    {{ address_form.non_field_errors }}
-    <div class="center">
-        {{ address_form.address.errors }}<br>
-        {{ address_form.address }}<br>
-        <span>
-            <input type="radio" name="search_type" value="address" checked="checked">Search by address
-            <input type="radio" name="search_type" value="parcel">Search by parcel ID<br>
-        </span>
-    </div>
-</form>
+<div class="background-image">
+    <h2 class="center">Search by parcel ID or address</h2>
+    <div><p>{{ msg }}</p></div>
+    <div id="error"><p>{{ error_message }}</p></div>
+    <form method="post">
+        {% csrf_token %}
+        {{ address_form.non_field_errors }}
+        <div class="center">
+            {{ address_form.address.errors }}<br>
+            {{ address_form.address }}<br>
+            <span>
+                <input type="radio" name="search_type" value="address" checked="checked">Search by address
+                <input type="radio" name="search_type" value="parcel">Search by parcel ID<br>
+            </span>
+        </div>
+    </form>
+</div>
 <br><br>
 {% include "hipbone/results.html" %}
 {% endblock %}
