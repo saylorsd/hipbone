@@ -1,12 +1,15 @@
 {% if parcel_id is not none and parcel_id != '' %}
-    <div id="info">
-        <h1>parcel ID:</h1> {{ parcel_id }}
-        {% if parcel_data|length %}
-            <br><br>
-            {% for key, value in parcel_data.items %}
-                <h1>{{ key }}:</h1> {{ value }}
+    {% if parcels|length == 1 %} {# Show selected result #}
+        <div id="info">
+            <div id="result-box" style="border: 1px solid black">
+            {% for parcel in parcels  %}
+                <h1>parcel ID:</h1> {{ parcel.parcel_id }}
+                {% for key, value in parcel.parcel_data.items %}
+                    <h1>{{ key }}:</h1> {{ value }}
+                {% endfor %}
             {% endfor %}
-        {% endif %}
+            </div>
+        </div>
         <form method="post" action="pdf/">
             {% csrf_token %}
             <input type="hidden" name="address" value="{{ address }}" />
@@ -15,5 +18,24 @@
             <input type="hidden" name="search_type" value="{{ search_type }}" />
             <input type="submit" id="download_as_pdf" value="Save as PDF">
         </form>
-    </div>
+    {% elif parcels|length > 1 %} {# Show multiple results #}
+        <div id="info">
+            {% if parcels|length %}
+                {% for parcel in parcels %}
+                    <div id="result-box" style="border: 1px solid black">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="search_type" value="parcel" checked="checked">
+                        <b>parcel ID:</b> {{ parcel.parcel_id }}
+                        <input type="hidden" name="address" value="{{ parcel.parcel_id }}" maxlength="255" required="" id="id_address">
+                        <input type="submit" value="More details">
+                    </form>
+                    {% for key, value in parcel.parcel_data.items %}
+                        <b>{{ key }}:</b> {{ value }}<br>
+                    {% endfor %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endif %}
 {% endif %}
