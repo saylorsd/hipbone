@@ -48,6 +48,7 @@ class IndexView(View):
         self.parcel_data = {}
         self.context = { 'parcel_id': self.parcel_id,
                 'parcel_data': self.parcel_data,
+                'parcels': [],
                 'msg': self.msg,
                 'error_message': ''
             }
@@ -66,6 +67,7 @@ class IndexView(View):
         form = self.form_class(request.POST)
         error_message = ''
         address = None
+        parcels = []
         if form.is_valid():
             # The form fields passed validation
             search_type = request.POST.get('search_type')
@@ -87,19 +89,30 @@ class IndexView(View):
                     json_data = json_response['data']
                     if 'parcel_id' in json_data:
                         self.parcel_id = json_data['parcel_id']
+                        parcel = {'parcel_id': json_data['parcel_id']}
                         if 'regions' in json_data and 'us_census_tract' in json_data['regions']:
                             if 'name' in json_data['regions']['us_census_tract']:
                                 self.parcel_data['Census tract'] = json_data['regions']['us_census_tract']['name']
+                                parcel['parcel_data'] = {'Census tract': json_data['regions']['us_census_tract']['name']}
+                        parcels.append(parcel)
+
                 elif 'results' in json_response: # Parse results of parcel ID lookup
                     json_results = json_response['results']
                     self.parcel_id = parcel_id
+                    parcel = {'parcel_id': parcel_id}
                     if 'us_census_tract' in json_results:
                         if 'name' in json_results['us_census_tract']:
                             self.parcel_data['Census tract'] = json_results['us_census_tract']['name']
+                            parcel['parcel_data'] = {'Census tract': json_results['us_census_tract']['name']}
+                    parcels.append(parcel)
+
+#            if search_type == 'address': # This is just for testing handling of multiple search results.
+#                parcels.append({'parcel_id': '123 Sesame Street', 'parcel_data': {'Census tract': '1234567890', 'main import': 'Cookies!'}})
 
         self.context = { 'address_form': form,
                 'search_type': search_type,
                 'address': address if address is not None else None,
+                'parcels': parcels,
                 'parcel_id': self.parcel_id,
                 'parcel_data': self.parcel_data,
                 'msg': self.msg,
