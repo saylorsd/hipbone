@@ -1,6 +1,6 @@
 {% if parcel_id is not none and parcel_id != '' %}
     {% if parcels|length == 1 %} {# Show selected result #}
-        <div style="float: right;clear: both;">
+        <div style="float:right; clear:both; margin:10px;">
             <form method="post" action="pdf/" target="_blank">
                 {% csrf_token %}
                 <input type="hidden" name="address" value="{{ address }}" />
