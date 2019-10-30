@@ -1,5 +1,6 @@
 /*Styling for HIPI Portal*/
 
+
 /*Obligatory CSS reset*/
 
 html, body, div, span, applet, object, iframe,
@@ -45,25 +46,6 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-
-
-/*FONTS*/
-/*broadly applies to entire page*/
-
-@import url('https://fonts.googleapis.com/css?family=Century+Gothic&display=swap')
-@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap')
-
-p { font-family: Poppins, Arial, sans-serif; font-size:14px;}
-
-h1 {text-transform:uppercase;
-	font-family: "Century Gothic", "Open Sans", sans-serif;
-	font-size:24px;
-	font-weight:500;
-	margin-bottom:10px;}
-
-/*style for "p" only renders correctly when typed above and below "h1"*/
-/*designer has written it off as mysterious witchcraft*/
-p { font-family: Poppins, Arial, sans-serif; font-size:14px;}
 
 
 /*div sections & colors styled*/

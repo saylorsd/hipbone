@@ -3,6 +3,24 @@
   <head>
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+    @import url('https://fonts.googleapis.com/css?family=Century+Gothic&display=swap')
+    /*FONTS*/
+    /*broadly applies to entire page*/
+
+    p { font-family: Poppins, Arial, sans-serif; font-size:14px;}
+
+    h1 {text-transform:uppercase;
+        font-family: "Century Gothic", "Open Sans", sans-serif;
+        font-size:24px;
+        font-weight:500;
+        margin-bottom:10px;}
+
+    /*style for "p" only renders correctly when typed above and below "h1"*/
+    /*designer has written it off as mysterious witchcraft*/
+    p { font-family: Poppins, Arial, sans-serif; font-size:14px;}
+    </style>
     <link rel="stylesheet" type="text/css" href="{% static 'hipbone/css/housing-portal-basic-style.css' %}">
     <style>
     /* Footer CSS-Grid CSS */
