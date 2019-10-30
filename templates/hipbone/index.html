@@ -12,8 +12,8 @@
 {% endblock %}
 
 {% block content %}
-<div id="header"><h1>Housing Information Portal</h1></div>
-<div><p>Enter an address to get information about the parcel. {{ msg }}</p></div>
+<h2 class="center">Search by parcel ID or address</h2>
+<div><p>{{ msg }}</p></div>
 <div id="error"><p>{{ error_message }}</p></div>
 <form method="post">
     {% csrf_token %}
