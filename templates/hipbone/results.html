@@ -1,6 +1,17 @@
 {% if parcel_id is not none and parcel_id != '' %}
     {% if parcels|length == 1 %} {# Show selected result #}
-        <div id="single-parcel-results">
+        <div style="float: right;clear: both;">
+            <form method="post" action="pdf/">
+                {% csrf_token %}
+                <input type="hidden" name="address" value="{{ address }}" />
+                <input type="hidden" name="parcels" value="{{ parcels }}" />
+                <input type="hidden" name="parcel_id" value="{{ parcel_id }}" />
+                <input type="hidden" name="parcel_data" value="{{ parcel_data }}" />
+                <input type="hidden" name="search_type" value="{{ search_type }}" />
+                <input type="image" src="/static/hipbone/images/printer.png" height="36px" width="auto" border="0" alt="Submit" />
+            </form>
+        </div>
+        <div id="single-parcel-results" style="clear: both;">
             <div id="orange-result-box" style="border: 3px solid orange">
             {% for parcel in parcels  %}
                 <span class="bold">Parcel ID:</span> {{ parcel.parcel_id }}<br>
@@ -10,14 +21,6 @@
             {% endfor %}
             </div>
         </div>
-        <form method="post" action="pdf/">
-            {% csrf_token %}
-            <input type="hidden" name="address" value="{{ address }}" />
-            <input type="hidden" name="parcel_id" value="{{ parcel_id }}" />
-            <input type="hidden" name="parcel_data" value="{{ parcel_data }}" />
-            <input type="hidden" name="search_type" value="{{ search_type }}" />
-            <input type="submit" id="download_as_pdf" value="Save as PDF">
-        </form>
     {% elif parcels|length > 1 %} {# Show multiple results #}
         <div id="info">
             {% if parcels|length %}
