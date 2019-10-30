@@ -53,14 +53,16 @@ class IndexView(View):
             }
 
     def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:                        # Use these two lines
-            return redirect('%s?next=%s' % ('/hipbone/login/', request.path))  # to make the report generator private.
+        if not request.user.is_authenticated:
+            return redirect('%s?next=%s' % ('/hipbone/login/', request.path))
 
         form = self.form_class()
         self.context['address_form'] = form
         return render(request, self.template_name, self.context)
 
     def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('%s?next=%s' % ('/hipbone/login/', request.path))
         form = self.form_class(request.POST)
         error_message = ''
         address = None
