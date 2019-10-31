@@ -66,6 +66,23 @@
         padding: 10px;
         border: 3px solid #f2ba5c;
     }
+
+    /* CSS for tables on results page */
+    .row {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      flex-basis: 100%;
+      flex: 1;
+      justify-content: space-between;
+     }
+
     </style>
     <!--link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"-->
     <link rel="stylesheet" href="{% static 'hipbone/css/jquery-ui.css' %}">
