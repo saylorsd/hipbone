@@ -21,6 +21,19 @@
             {% endfor %}
             </div>
         </div>
+        <div id="tabs">
+            <ul>
+            <li><a href="#tabs-1">Information</a></li>
+            <li><a href="#tabs-2">Characteristics</a></li>
+            <li><a href="#tabs-3">Links</a></li>
+            </ul>
+            <div id="tabs-1">
+            </div>
+            <div id="tabs-2">
+            </div>
+            <div id="tabs-3">
+            </div>
+        </div>
     {% elif parcels|length > 1 %} {# Show multiple results #}
         <div id="info">
             {% if parcels|length %}
