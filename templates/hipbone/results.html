@@ -62,8 +62,8 @@
 	    <form method="post">
 		{% csrf_token %}
 		<input type="hidden" name="search_type" value="parcel" checked="checked">
-		<b>parcel ID:</b> {{ parcel.parcel_id }}
-		<input type="hidden" name="address" value="{{ parcel.parcel_id }}" maxlength="255" required="" id="id_address">
+		<b>parcel ID:</b> {{ parcel.prop_parcelnum }}
+		<input type="hidden" name="address" value="{{ parcel.prop_parcelnum }}" maxlength="255" required="" id="id_address">
 		<input type="submit" value="More details">
 	    </form>
 	    {% for key, value in parcel.parcel_data.items %}
