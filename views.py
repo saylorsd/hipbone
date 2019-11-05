@@ -44,7 +44,7 @@ class IndexView(View):
 
     def __init__(self):
         self.template_name = 'hipbone/index.html'
-        self.msg = '(NOTE: This is currently using a WPRDC API to look up addresses.)'
+        self.msg = ''
         self.form_class = AddressForm
         self.parcel_id = None
         self.parcel_data = {}
