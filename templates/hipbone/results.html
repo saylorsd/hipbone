@@ -27,19 +27,24 @@
     <div id="tabs-1">
 	<div class='row'>
 	    <div class='fcolumn'>
-		<div class='row'>
+		<div class='row' style="margin-bottom:2em;">
 			<table cellpadding="20px" style="background-color:#ffffff; color:#000000">
 			<thead style="background-color:#f2ba5c; color:#000000"><th colspan="2"><span class="bold">CURRENT INFORMATION</span></th></thead>
 			<tr><td>Last sale price</td><td>{{ parcels.0.last_sale_amount }}</td></tr>
 			<tr><td>Last sale date</td><td>{{ parcels.0.last_sale_date }}</td></tr>
 			</table>
 		</div>
-		<div class='row'>
-		Table 2
+		<div class='row' style="margin-bottom:2em;">
+			<table cellpadding="20px" style="background-color:#ffffff; color:#000000">
+			<thead style="background-color:#f2ba5c; color:#000000"><th colspan="2"><span class="bold">MISC.</span></th></thead>
+			<tr><td>Vacancy rate</td><td>{{ parcels.0.vacant_percent }}%</td></tr>
+			<tr><td>Number of vacant units</td><td>{{ parcels.0.num_vacant }}</td></tr>
+			<tr><td>Number of occupied units</td><td>{{ parcels.0.num_occupied }}</td></tr>
+			</table>
 		</div>
 	    </div>
 	    <div class='fcolumn'>
-		<div class='row'>
+		<div class='row' style="margin-bottom:2em;">
 			<table cellpadding="20px" style="background-color:#ffffff; color:#000000">
 			<thead style="background-color:#f2ba5c; color:#000000"><th colspan="2"><span class="bold">GEOGRAPHIC INFORMATION</span></th></thead>
 			<tr><td>Latitude</td><td>{{ parcels.0.y_wgs84 }}</td></tr>
