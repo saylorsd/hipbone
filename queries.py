@@ -2,7 +2,7 @@ from django.db import connection, connections
 from icecream import ic
 
 def dictfetchall(cursor):
-    """Return all rows from a cursor as a dict. Set up the cursor by executing 
+    """Return all rows from a cursor as a dict. Set up the cursor by executing
     the query and then run this to get the result as a list of dicts."""
     columns = [col[0] for col in cursor.description]
     return [
@@ -34,7 +34,7 @@ def form_address_query(address, date_str=None):
 def query_db(search_type, search_term, date_str='9/1/2019'):
     if search_type == 'address':
         #sample_query = form_address_query('440 Burroughs', '9/1/2019')
-        query = form_address_query('440 Burroughs', date_str)
+        query = form_address_query(search_term, date_str)
         #ic(query)
         #query = "SELECT * FROM parcel.master LIMIT 3;"
     #with connections['default'].cursor() as cursor:
