@@ -31,10 +31,10 @@ def form_address_query(address, date_str=None):
         query += " AND '{}'::date BETWEEN start_date AND end_date\nAND a2.quarter = EXTRACT(Quarter FROM '{}'::date);".format(date_str, date_str)
     return query
 
-def query_db(search_type, search_term):
+def query_db(search_type, search_term, date_str='9/1/2019'):
     if search_type == 'address':
-        sample_query = form_address_query('440 Burroughs', '9/1/2019')
-        query = sample_query
+        #sample_query = form_address_query('440 Burroughs', '9/1/2019')
+        query = form_address_query('440 Burroughs', date_str)
         #ic(query)
         #query = "SELECT * FROM parcel.master LIMIT 3;"
     #with connections['default'].cursor() as cursor:
