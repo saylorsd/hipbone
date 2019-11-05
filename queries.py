@@ -10,9 +10,12 @@ BASE_QUERY = """SELECT ST_X(mm.geom_centroid) x_wgs84,
     a2.quarter,
     a2.vacant_percent,
     a2.num_vacant,
-    a2.num_occupied
+    a2.num_occupied,
+    ptv.last_sale_amount,
+    ptv.last_sale_date
     FROM parcel.master mm inner join parcel_admin_details a1 on mm.d3_id=a1.d3_id
-    LEFT JOIN vacancy a2 on mm.d3_id=a2.d3_id"""
+    LEFT JOIN vacancy a2 on mm.d3_id=a2.d3_id
+    LEFT JOIN parcel_tax_and_values ptv on mm.d3_id=ptv.d3_id"""
 
 def append_date_clause(query, date_str):
     if date_str is not None:

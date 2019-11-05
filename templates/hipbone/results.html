@@ -28,12 +28,10 @@
 	<div class='row'>
 	    <div class='fcolumn'>
 		<div class='row'>
-			{% for key, value in parcel.parcel_data.items %}
-			    <span class="bold">{{ key }}:</span> {{ value }}<br>
-			{% endfor %}
-		    <table><thead><th>Current Information</th></thead>
-			<tr><td>Current sales price</td><td>170,000</td></tr>
-		    </table>
+			<table><thead><th>Current Information</th></thead>
+			<tr><td>Last sale price</td><td>{{ parcels.0.last_sale_amount }}</td></tr>
+			<tr><td>Last sale date</td><td>{{ parcels.0.last_sale_date }}</td></tr>
+			</table>
 		</div>
 		<div class='row'>
 		Table 2
