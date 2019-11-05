@@ -1,4 +1,4 @@
-from django.db import connection, connections
+from django.db import connection
 from icecream import ic
 
 BASE_QUERY = """SELECT ST_X(mm.geom_centroid) x_wgs84,
@@ -45,11 +45,9 @@ def query_db(search_type, search_term, date_str='9/1/2019'):
     if search_type == 'address':
         #sample_query = form_address_query('440 Burroughs', '9/1/2019')
         query = form_address_query(search_term, date_str)
-        #ic(query)
-        #query = "SELECT * FROM parcel.master LIMIT 3;"
     else: # search_type = 'parcel'
         query = form_parcel_query(search_term, date_str)
-    #with connections['default'].cursor() as cursor:
+
     with connection.cursor() as cursor:
         cursor.execute(query)
         rows = dictfetchall(cursor)
