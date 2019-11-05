@@ -114,17 +114,17 @@ class IndexView(View):
                 rows = query_db(search_type, search_term)
                 parcels = []
                 for row in rows:
-                    parcel = {}
+                    parcel = row
+                    self.parcel_id = row['prop_parcelnum'] if 'prop_parcelnum' in row else '(No parcel number)'
                     if search_type == 'address':
                         parcel['address'] = search_term
                     else:
                         parcel['parcel_id'] = search_term
-
-                    parcel['parcel_data'] = {'Census tract': json.dumps(rows)}
                     parcels.append(parcel)
 
 #            if search_type == 'address': # This is just for testing handling of multiple search results.
 #                parcels.append({'parcel_id': '123 Sesame Street', 'parcel_data': {'Census tract': '1234567890', 'main import': 'Cookies!'}})
+
 
         self.context = { 'address_form': form,
                 'search_type': search_type,
