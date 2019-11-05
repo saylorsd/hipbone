@@ -31,12 +31,37 @@ def form_address_query(address, date_str=None):
         query += " AND '{}'::date BETWEEN start_date AND end_date\nAND a2.quarter = EXTRACT(Quarter FROM '{}'::date);".format(date_str, date_str)
     return query
 
+
+def form_parcel_query(parcel_number, date_str=None):
+    """The only difference between the two queries is the first part of the WHERE clause."""
+    query = """SELECT ST_X(mm.geom_centroid) x_wgs84,
+    ST_Y(mm.geom_centroid) y_wgs84,
+    mm.parcel_year,
+    a1.prop_addr,
+    a1.prop_parcelnum,
+    a1.prop_legaldesc,
+    a2.quarter,
+    a2.vacant_percent,
+    a2.num_vacant,
+    a2.num_occupied
+    FROM parcel.master mm inner join parcel_admin_details a1 on mm.d3_id=a1.d3_id
+    LEFT JOIN vacancy a2 on mm.d3_id=a2.d3_id"""
+
+    #--FUTURE TABLES LEFT JOIN HERE
+    query += " WHERE prop_parcelnum = UPPER('{}')".format(parcel_number)
+
+    if date_str is not None:
+        query += " AND '{}'::date BETWEEN start_date AND end_date\nAND a2.quarter = EXTRACT(Quarter FROM '{}'::date);".format(date_str, date_str)
+    return query
+
 def query_db(search_type, search_term, date_str='9/1/2019'):
     if search_type == 'address':
         #sample_query = form_address_query('440 Burroughs', '9/1/2019')
         query = form_address_query(search_term, date_str)
         #ic(query)
         #query = "SELECT * FROM parcel.master LIMIT 3;"
+    else: # search_type = 'parcel'
+        query = form_parcel_query(search_term, date_str)
     #with connections['default'].cursor() as cursor:
     with connection.cursor() as cursor:
         cursor.execute(query)
