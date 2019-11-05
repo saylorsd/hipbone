@@ -1,74 +1,73 @@
-{% if parcel_id is not none and parcel_id != '' %}
-    {% if parcels|length == 1 %} {# Show selected result #}
-        <div style="float:right; clear:both; margin:10px;">
-            <form method="post" action="pdf/" target="_blank">
-                {% csrf_token %}
-                <input type="hidden" name="address" value="{{ address }}" />
-                <input type="hidden" name="parcels" value="{{ parcels }}" />
-                <input type="hidden" name="parcel_id" value="{{ parcel_id }}" />
-                <input type="hidden" name="parcel_data" value="{{ parcel_data }}" />
-                <input type="hidden" name="search_type" value="{{ search_type }}" />
-                <input type="image" src="/static/hipbone/images/printer.png" height="36px" width="auto" border="0" alt="Submit" />
-            </form>
-        </div>
-        <div id="single-parcel-results" style="clear: both;">
-            <div id="orange-result-box">
-            {% for parcel in parcels  %}
-                <span class="bold">Parcel ID:</span> {{ parcel.parcel_id }}<br>
-                {% for key, value in parcel.parcel_data.items %}
-                    <span class="bold">{{ key }}:</span> {{ value }}<br>
-                {% endfor %}
-            {% endfor %}
-            </div>
-        </div>
-        <div id="tabs">
-            <ul>
-            <li><a href="#tabs-1">Information</a></li>
-            <li><a href="#tabs-2">Characteristics</a></li>
-            <li><a href="#tabs-3">Links</a></li>
-            </ul>
-            <div id="tabs-1">
-                <div class='row'>
-                    <div class='fcolumn'>
-                        <div class='row'>
-                            <table><thead><th>Current Information</th></thead>
-                                <tr><td>Current sales price</td><td>170,000</td></tr>
-                            </table>
-                        </div>
-                        <div class='row'>
-                        Table 2
-                        </div>
-                    </div>
-                    <div class='fcolumn'>
-                        <div class='row'>
-                        Table 3
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="tabs-2">
-            </div>
-            <div id="tabs-3">
-            </div>
-        </div>
-    {% elif parcels|length > 1 %} {# Show multiple results #}
-        <div id="info">
-            {% if parcels|length %}
-                {% for parcel in parcels %}
-                    <div id="result-box" style="border: 1px solid black">
-                    <form method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="search_type" value="parcel" checked="checked">
-                        <b>parcel ID:</b> {{ parcel.parcel_id }}
-                        <input type="hidden" name="address" value="{{ parcel.parcel_id }}" maxlength="255" required="" id="id_address">
-                        <input type="submit" value="More details">
-                    </form>
-                    {% for key, value in parcel.parcel_data.items %}
-                        <b>{{ key }}:</b> {{ value }}<br>
-                    {% endfor %}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
+{% if parcels|length == 1 %} {# Show selected result #}
+<div style="float:right; clear:both; margin:10px;">
+    <form method="post" action="pdf/" target="_blank">
+	{% csrf_token %}
+	<input type="hidden" name="address" value="{{ address }}" />
+	<input type="hidden" name="parcels" value="{{ parcels }}" />
+	<input type="hidden" name="parcel_id" value="{{ parcel_id }}" />
+	<input type="hidden" name="parcel_data" value="{{ parcel_data }}" />
+	<input type="hidden" name="search_type" value="{{ search_type }}" />
+	<input type="image" src="/static/hipbone/images/printer.png" height="36px" width="auto" border="0" alt="Submit" />
+    </form>
+</div>
+<div id="single-parcel-results" style="clear: both;">
+    <div id="orange-result-box">
+    {% for parcel in parcels  %}
+	<span class="bold">{{ parcel.prop_addr }}</span><br>
+	Parcel ID: {{ parcel.prop_parcelnum }}<br>
+    {% endfor %}
+    </div>
+</div>
+<div id="tabs">
+    <ul>
+    <li><a href="#tabs-1">Information</a></li>
+    <li><a href="#tabs-2">Characteristics</a></li>
+    <li><a href="#tabs-3">Links</a></li>
+    </ul>
+    <div id="tabs-1">
+	<div class='row'>
+	    <div class='fcolumn'>
+		<div class='row'>
+			{% for key, value in parcel.parcel_data.items %}
+			    <span class="bold">{{ key }}:</span> {{ value }}<br>
+			{% endfor %}
+		    <table><thead><th>Current Information</th></thead>
+			<tr><td>Current sales price</td><td>170,000</td></tr>
+		    </table>
+		</div>
+		<div class='row'>
+		Table 2
+		</div>
+	    </div>
+	    <div class='fcolumn'>
+		<div class='row'>
+		Table 3
+		</div>
+	    </div>
+	</div>
+    </div>
+    <div id="tabs-2">
+    </div>
+    <div id="tabs-3">
+    </div>
+</div>
+{% elif parcels|length > 1 %} {# Show multiple results #}
+<div id="info">
+    {% if parcels|length %}
+	{% for parcel in parcels %}
+	    <div id="result-box" style="border: 1px solid black">
+	    <form method="post">
+		{% csrf_token %}
+		<input type="hidden" name="search_type" value="parcel" checked="checked">
+		<b>parcel ID:</b> {{ parcel.parcel_id }}
+		<input type="hidden" name="address" value="{{ parcel.parcel_id }}" maxlength="255" required="" id="id_address">
+		<input type="submit" value="More details">
+	    </form>
+	    {% for key, value in parcel.parcel_data.items %}
+		<b>{{ key }}:</b> {{ value }}<br>
+	    {% endfor %}
+	    </div>
+	{% endfor %}
     {% endif %}
+</div>
 {% endif %}
