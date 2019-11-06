@@ -3,7 +3,6 @@
     <form method="post" action="pdf/" target="_blank">
 	{% csrf_token %}
 	<input type="hidden" name="parcels" value="{{ parcels }}" />
-	<input type="hidden" name="parcel_data" value="{{ parcel_data }}" />
 	<input type="hidden" name="search_type" value="{{ search_type }}" />
 	<input type="image" src="/static/hipbone/images/printer.png" height="36px" width="auto" border="0" alt="Submit" />
     </form>
@@ -69,9 +68,6 @@
 		<input type="hidden" name="address" value="{{ parcel.prop_parcelnum }}" maxlength="255" required="" id="id_address">
 		<input type="submit" value="More details">
 	    </form>
-	    {% for key, value in parcel.parcel_data.items %}
-		<b>{{ key }}:</b> {{ value }}<br>
-	    {% endfor %}
 	    </div>
 	{% endfor %}
     {% endif %}

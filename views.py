@@ -46,9 +46,7 @@ class IndexView(View):
         self.template_name = 'hipbone/index.html'
         self.msg = ''
         self.form_class = AddressForm
-        self.parcel_data = {}
-        self.context = { 'parcel_data': self.parcel_data,
-                'parcels': [],
+        self.context = { 'parcels': [],
                 'msg': self.msg,
                 'error_message': ''
             }
@@ -115,7 +113,6 @@ class IndexView(View):
         self.context = { 'address_form': form,
                 'search_type': search_type,
                 'parcels': parcels,
-                'parcel_data': self.parcel_data,
                 'msg': self.msg,
                 'error_message': error_message
             }
