@@ -48,7 +48,8 @@ class IndexView(View):
         self.form_class = AddressForm
         self.context = { 'parcels': [],
                 'msg': self.msg,
-                'error_message': ''
+                'error_message': '',
+                'output_format': 'html'
             }
 
     def get(self, request, *args, **kwargs):
@@ -118,7 +119,8 @@ class IndexView(View):
                 # supporting something like the tojson filter, we could just use that
                 # in the template ({{ parcels|tojson|safe }}) instead.
                 'msg': self.msg,
-                'error_message': error_message
+                'error_message': error_message,
+                'output_format': 'html'
             }
 
         #raise ValueError("self.context = {}".format(self.context))

@@ -83,6 +83,11 @@
       justify-content: space-between;
      }
 
+    .vertically-align {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
     </style>
     <!--link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"-->
     <link rel="stylesheet" href="{% static 'hipbone/css/jquery-ui.css' %}">
@@ -121,6 +126,7 @@
     </main>
     <footer>
         <div id="footer">
+            {% if output_format == 'html' %}
             <div class="wrapper">
                 <div class="box a">{% block footer_message %}
                 Send us feedback about this tool through our <a href="https://datadrivendetroit.org/askd3/">AskD3 site</a>.
@@ -128,6 +134,12 @@
                 <div class="box b"><img class="autosize" src="{% static 'hipbone/images/D3_logo.png' %}"></div>
                 <div class="box c"><img class="autosize" src="{% static 'hipbone/images/ask-d3-logo.png' %}"></div>
             </div>
+            {% else %}
+                <div style="float:left; width:50%;" class="vertically-align">Send us feedback about this tool through our <a href="https://datadrivendetroit.org/askd3/">AskD3 site</a>.</div>
+                <div style="float:left; width:25%;" class="vertically-align"><img height="50px" width="auto" src="{% static 'hipbone/images/D3_logo.png' %}"></div>
+                <div style="float:right; width:25%;" class="vertically-align"><img height="150px" width="auto" src="{% static 'hipbone/images/ask-d3-logo.png' %}"</div>
+            </table>
+            {% endif %}
         </div>
     </footer>
     {% block javascript %}{% endblock %}

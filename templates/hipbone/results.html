@@ -16,11 +16,13 @@
     </div>
 </div>
 <div id="tabs">
+    {% if output_format == 'html' %}
     <ul>
     <li><a href="#tabs-1" class="bold">INFORMATION</a></li>
     <li><a href="#tabs-2" class="bold">CHARACTERISTICS</a></li>
     <li><a href="#tabs-3" class="bold">LINKS</a></li>
     </ul>
+    {% endif %}
     <div id="tabs-1">
 	<div class='row'>
 	    <div class='fcolumn'>

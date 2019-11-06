@@ -17,7 +17,8 @@ def generate_pdf(request):
         'address_form': AddressForm,
         'search_type': request.POST.get('search_type', None),
         'parcels': parcels,
-        'msg': ""
+        'msg': '',
+        'output_format': 'pdf'
     }
 
     # Render the HTML
