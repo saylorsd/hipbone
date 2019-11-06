@@ -11,7 +11,6 @@ from icecream import ic
 def generate_pdf(request):
     """Generate a PDF version of a given HTML template."""
     # Collect the information to be included in the template.
-    address = request.POST.get('address', None)
     parcels = request.POST.get('parcels', None)
     parcels = json.loads(re.sub("'", '"', parcels))
     parcel_id = request.POST.get('parcel_id', None)
@@ -20,7 +19,6 @@ def generate_pdf(request):
     data = {
         'address_form': AddressForm,
         'search_type': request.POST.get('search_type', None),
-        'address': address,
         'parcel_id': parcel_id,
         'parcel_data': parcel_data,
         'parcels': parcels,

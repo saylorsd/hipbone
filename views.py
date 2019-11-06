@@ -68,7 +68,6 @@ class IndexView(View):
             return redirect('%s?next=%s' % ('/hipbone/login/', request.path))
         form = self.form_class(request.POST)
         error_message = ''
-        address = None
         parcels = []
         if form.is_valid():
             # The form fields passed validation
@@ -116,9 +115,7 @@ class IndexView(View):
                 for row in rows:
                     parcel = row
                     self.parcel_id = row['prop_parcelnum'] if 'prop_parcelnum' in row else '(No parcel number)'
-                    if search_type == 'address':
-                        parcel['address'] = search_term
-                    else:
+                    if search_type != 'address':
                         parcel['parcel_id'] = search_term
                     parcels.append(parcel)
 
@@ -128,12 +125,13 @@ class IndexView(View):
 
         self.context = { 'address_form': form,
                 'search_type': search_type,
-                'address': address if address is not None else None,
                 'parcels': parcels,
                 'parcel_id': self.parcel_id,
                 'parcel_data': self.parcel_data,
                 'msg': self.msg,
                 'error_message': error_message
             }
+
+        #raise ValueError("self.context = {}".format(self.context))
         post_response = render(request, self.template_name, self.context)
         return post_response

@@ -2,7 +2,6 @@
 <div style="float:right; clear:both; margin:10px;">
     <form method="post" action="pdf/" target="_blank">
 	{% csrf_token %}
-	<input type="hidden" name="address" value="{{ address }}" />
 	<input type="hidden" name="parcels" value="{{ parcels }}" />
 	<input type="hidden" name="parcel_id" value="{{ parcel_id }}" />
 	<input type="hidden" name="parcel_data" value="{{ parcel_data }}" />
