@@ -3,7 +3,6 @@
     <form method="post" action="pdf/" target="_blank">
 	{% csrf_token %}
 	<input type="hidden" name="parcels" value="{{ parcels }}" />
-	<input type="hidden" name="parcel_id" value="{{ parcel_id }}" />
 	<input type="hidden" name="parcel_data" value="{{ parcel_data }}" />
 	<input type="hidden" name="search_type" value="{{ search_type }}" />
 	<input type="image" src="/static/hipbone/images/printer.png" height="36px" width="auto" border="0" alt="Submit" />

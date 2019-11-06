@@ -13,13 +13,11 @@ def generate_pdf(request):
     # Collect the information to be included in the template.
     parcels = request.POST.get('parcels', None)
     parcels = json.loads(re.sub("'", '"', parcels))
-    parcel_id = request.POST.get('parcel_id', None)
     parcel_data = request.POST.get('parcel_data', '{}')
     parcel_data = json.loads(re.sub("'", '"', parcel_data))
     data = {
         'address_form': AddressForm,
         'search_type': request.POST.get('search_type', None),
-        'parcel_id': parcel_id,
         'parcel_data': parcel_data,
         'parcels': parcels,
         'msg': ""

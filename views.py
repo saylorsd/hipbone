@@ -46,10 +46,8 @@ class IndexView(View):
         self.template_name = 'hipbone/index.html'
         self.msg = ''
         self.form_class = AddressForm
-        self.parcel_id = None
         self.parcel_data = {}
-        self.context = { 'parcel_id': self.parcel_id,
-                'parcel_data': self.parcel_data,
+        self.context = { 'parcel_data': self.parcel_data,
                 'parcels': [],
                 'msg': self.msg,
                 'error_message': ''
@@ -92,8 +90,7 @@ class IndexView(View):
                     if 'data' in json_response: # Parse results of address lookup
                         json_data = json_response['data']
                         if 'parcel_id' in json_data:
-                            self.parcel_id = json_data['parcel_id']
-                            parcel = {'parcel_id': json_data['parcel_id']}
+                            parcel = {}
                             if 'regions' in json_data and 'us_census_tract' in json_data['regions']:
                                 if 'name' in json_data['regions']['us_census_tract']:
                                     self.parcel_data['Census tract'] = json_data['regions']['us_census_tract']['name']
@@ -102,22 +99,14 @@ class IndexView(View):
 
                     elif 'results' in json_response: # Parse results of parcel ID lookup
                         json_results = json_response['results']
-                        self.parcel_id = parcel_id
-                        parcel = {'parcel_id': parcel_id}
+                        parcel = {}
                         if 'us_census_tract' in json_results:
                             if 'name' in json_results['us_census_tract']:
                                 self.parcel_data['Census tract'] = json_results['us_census_tract']['name']
                                 parcel['parcel_data'] = {'Census tract': json_results['us_census_tract']['name']}
                         parcels.append(parcel)
             else:
-                rows = query_db(search_type, search_term)
-                parcels = []
-                for row in rows:
-                    parcel = row
-                    self.parcel_id = row['prop_parcelnum'] if 'prop_parcelnum' in row else '(No parcel number)'
-                    if search_type != 'address':
-                        parcel['parcel_id'] = search_term
-                    parcels.append(parcel)
+                parcels = query_db(search_type, search_term)
 
 #            if search_type == 'address': # This is just for testing handling of multiple search results.
 #                parcels.append({'parcel_id': '123 Sesame Street', 'parcel_data': {'Census tract': '1234567890', 'main import': 'Cookies!'}})
@@ -126,7 +115,6 @@ class IndexView(View):
         self.context = { 'address_form': form,
                 'search_type': search_type,
                 'parcels': parcels,
-                'parcel_id': self.parcel_id,
                 'parcel_data': self.parcel_data,
                 'msg': self.msg,
                 'error_message': error_message
