@@ -113,6 +113,10 @@ class IndexView(View):
         self.context = { 'address_form': form,
                 'search_type': search_type,
                 'parcels': parcels,
+                'json_parcels': json.dumps(parcels), # This is only here to be passed
+                # back to weasy_pdf.py, avoiding further queries. If Django templating
+                # supporting something like the tojson filter, we could just use that
+                # in the template ({{ parcels|tojson|safe }}) instead.
                 'msg': self.msg,
                 'error_message': error_message
             }

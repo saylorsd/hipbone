@@ -2,7 +2,7 @@
 <div style="float:right; clear:both; margin:10px;">
     <form method="post" action="pdf/" target="_blank">
 	{% csrf_token %}
-	<input type="hidden" name="parcels" value="{{ parcels }}" />
+	<input type="hidden" name="json_parcels" value="{{ json_parcels }}" />
 	<input type="hidden" name="search_type" value="{{ search_type }}" />
 	<input type="image" src="/static/hipbone/images/printer.png" height="36px" width="auto" border="0" alt="Submit" />
     </form>
