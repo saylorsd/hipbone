@@ -59,7 +59,10 @@ td {
 
 /*Section 1: Title/Header*/
 #header {
-	padding: 40px;
+	padding-left: 40px;
+	padding-right: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 	background-color: #2f2f2f;
 	color: #00698c;
 } 
