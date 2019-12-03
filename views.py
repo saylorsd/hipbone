@@ -22,8 +22,7 @@ def user_login(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(request, # Django 2.2
-#            user = authenticate(          # Django 1.10
+            user = authenticate(request,
                                 username=cd['username'],
                                 password=cd['password'])
             if user is not None:
@@ -111,10 +110,6 @@ class IndexView(View):
             else:
                 parcels = query_db(search_type, search_term)
 
-#            if search_type == 'address': # This is just for testing handling of multiple search results.
-#                parcels.append({'parcel_id': '123 Sesame Street', 'parcel_data': {'Census tract': '1234567890', 'main import': 'Cookies!'}})
-
-
         self.context = { 'address_form': form,
                 'search_type': search_type,
                 'parcels': parcels,
@@ -126,7 +121,5 @@ class IndexView(View):
                 'error_message': error_message,
                 'output_format': 'html'
             }
-
-        #raise ValueError("self.context = {}".format(self.context))
         post_response = render(request, self.template_name, self.context)
         return post_response
