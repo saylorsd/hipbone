@@ -16,7 +16,8 @@ BASE_QUERY = """SELECT ST_X(mm.geom_centroid) x_wgs84,
     db.block_number,
     dbg.block_group_name,
     c.city_name,
-    ct.census_tract_number
+    ct.census_tract_number,
+    mm.d3_id AS d3_id
     FROM parcel.master mm inner join parcel_admin_details a1 on mm.d3_id=a1.d3_id
     LEFT JOIN vacancy a2 on mm.d3_id=a2.d3_id
     LEFT JOIN parcel_tax_and_values ptv on mm.d3_id=ptv.d3_id
@@ -59,6 +60,24 @@ def query_db(search_type, search_term, date_str='9/1/2019'):
     else: # search_type = 'parcel'
         query = form_parcel_query(search_term, date_str)
 
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = dictfetchall(cursor)
+    return rows
+
+def execute(query):
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = dictfetchall(cursor)
+    return rows
+
+def aggregate_voters(d3_id):
+    query = "SELECT d3_year, ROUND(voter_birth_year/10)*10::int AS decade, COUNT(id) AS count FROM voters WHERE d3_id = {} GROUP BY decade, d3_year ORDER BY d3_year, decade".format(d3_id)
+    return execute(query)
+
+def query_voters(d3_id):
+    query = "SELECT d3_year, voter_birth_year FROM voters WHERE d3_id = {} ORDER BY d3_year, voter_birth_year".format(d3_id)
+    # return execute(query)
     with connection.cursor() as cursor:
         cursor.execute(query)
         rows = dictfetchall(cursor)
