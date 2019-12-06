@@ -53,10 +53,14 @@
     <div id="search-form-wrapper">
         <form method="post">
             {% csrf_token %}
-            {{ address_form.non_field_errors }}
-            <div class="center">
-                {{ address_form.address.errors }}<br>
-                {{ address_form.address }}<br>
+            <!--{{ address_form.non_field_errors }}-->
+            <div class="center" style="position:relative;">
+                <br>
+                <input type="text" name="address" value="" required="" id="id_address">
+                <!--input class="address_form" type="text" name="address" value="" maxlength="255" required="" id="id_address"-->
+                <br>
+                <!--{{ address_form.address.errors }}<br>
+                    {{ address_form.address }}<br>-->
                 <span>
                     <button class="search_button" name="search_type" type="submit" value="address">By Address</button>
                     <button class="search_button align_right" name="search_type" type="submit" value="parcel">By Parcel ID</button>
