@@ -10,7 +10,7 @@ import requests, json
 
 from .models import UserLoginActivity
 from .tracking_util import save_activity
-from .queries import query_db
+from .queries import query_db, query_voters, aggregate_voters
 from .parameters.local import PRODUCTION
 
 from django.contrib.auth.decorators import login_required
@@ -106,6 +106,13 @@ class IndexView(View):
                         parcels.append(parcel)
             else:
                 parcels = query_db(search_type, search_term)
+                if len(parcels) == 1:
+                    d3_id = parcels[0]['d3_id']
+                    voters = query_voters(d3_id)
+                    aggregated_voters = aggregate_voters(d3_id)
+                else:
+                    voters = []
+                    aggregated_voters = []
 
 #            if search_type == 'address': # This is just for testing handling of multiple search results.
 #                parcels.append({'parcel_id': '123 Sesame Street', 'parcel_data': {'Census tract': '1234567890', 'main import': 'Cookies!'}})
@@ -118,6 +125,8 @@ class IndexView(View):
                 # back to weasy_pdf.py, avoiding further queries. If Django templating
                 # supporting something like the tojson filter, we could just use that
                 # in the template ({{ parcels|tojson|safe }}) instead.
+                'voters': voters,
+                'aggregated_voters': aggregated_voters,
                 'msg': self.msg,
                 'error_message': error_message,
                 'output_format': 'html'
