@@ -21,6 +21,24 @@
   background-image: url(/static/hipbone/images/search-header_house-search.png);
 }
 
+.search_button {
+    background-color: #2F2F2F; /* Dark Grey */
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    width: 49%;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.align_right {
+    position: absolute;
+    right: 0;
+}
+
 #id_address {
     width: 100%
 }
@@ -40,8 +58,8 @@
                 {{ address_form.address.errors }}<br>
                 {{ address_form.address }}<br>
                 <span>
-                    <input type="radio" name="search_type" value="address" checked="checked">Search by address
-                    <input type="radio" name="search_type" value="parcel">Search by parcel ID<br>
+                    <button class="search_button" name="search_type" type="submit" value="address">By Address</button>
+                    <button class="search_button align_right" name="search_type" type="submit" value="parcel">By Parcel ID</button>
                 </span>
             </div>
         </form>
