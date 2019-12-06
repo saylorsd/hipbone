@@ -73,7 +73,7 @@ class IndexView(View):
                 address = cd['address']
                 search_term = address
                 url = "https://tools.wprdc.org/geo/geocode?addr={}".format(address)
-            else:
+            else: # Implicitly, search_type == 'parcel'
                 cd = form.cleaned_data
                 parcel_id = cd['address'] # [ ] Generalize the term 'address' to some include parcel ID
                 search_term = parcel_id
