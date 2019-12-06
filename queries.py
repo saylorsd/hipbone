@@ -64,3 +64,21 @@ def query_db(search_type, search_term, date_str='9/1/2019'):
         cursor.execute(query)
         rows = dictfetchall(cursor)
     return rows
+
+def execute(query):
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = dictfetchall(cursor)
+    return rows
+
+def aggregate_voters(d3_id):
+    query = "SELECT d3_year, ROUND(voter_birth_year/10)*10::int AS decade, COUNT(id) AS count FROM voters WHERE d3_id = {} GROUP BY decade, d3_year ORDER BY d3_year, decade".format(d3_id)
+    return execute(query)
+
+def query_voters(d3_id):
+    query = "SELECT d3_year, voter_birth_year FROM voters WHERE d3_id = {} ORDER BY d3_year, voter_birth_year".format(d3_id)
+    # return execute(query)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = dictfetchall(cursor)
+    return rows
