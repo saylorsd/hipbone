@@ -1,4 +1,8 @@
-{% if parcels|length == 1 %} {# Show selected result #}
+{% if parcels|length == 0 %} {# Show selected result #}
+<div id="single-parcel-results" style="clear: both;">
+    No results.
+</div>
+{% elif parcels|length == 1 %} {# Show selected result #}
 <div style="float:right; clear:both; margin:10px;">
     <form method="post" action="pdf/" target="_blank">
 	{% csrf_token %}

@@ -80,30 +80,34 @@ class IndexView(View):
                 search_term = parcel_id
                 url = "https://tools.wprdc.org/geo/reverse_geocode/?pin={}".format(parcel_id)
 
+            WPRDC_LOOKUP = False
             if not PRODUCTION:
-                response = requests.get(url)
-                if response.status_code != 200:
-                    error_message = 'Look-up failed with status code {}.'.format(response.status_code)
-                else:
-                    json_response = response.json()
-                    if 'data' in json_response: # Parse results of address lookup
-                        json_data = json_response['data']
-                        if 'parcel_id' in json_data:
-                            parcel = {}
-                            if 'regions' in json_data and 'us_census_tract' in json_data['regions']:
-                                if 'name' in json_data['regions']['us_census_tract']:
-                                    self.parcel_data['Census tract'] = json_data['regions']['us_census_tract']['name']
-                                    parcel['parcel_data'] = {'Census tract': json_data['regions']['us_census_tract']['name']}
-                            parcels.append(parcel)
+                if WPRDC_LOOKUP:
+                    response = requests.get(url)
+                    if response.status_code != 200:
+                        error_message = 'Look-up failed with status code {}.'.format(response.status_code)
+                    else:
+                        json_response = response.json()
+                        if 'data' in json_response: # Parse results of address lookup
+                            json_data = json_response['data']
+                            if 'parcel_id' in json_data:
+                                parcel = {}
+                                if 'regions' in json_data and 'us_census_tract' in json_data['regions']:
+                                    if 'name' in json_data['regions']['us_census_tract']:
+                                        self.parcel_data['Census tract'] = json_data['regions']['us_census_tract']['name']
+                                        parcel['parcel_data'] = {'Census tract': json_data['regions']['us_census_tract']['name']}
+                                parcels.append(parcel)
 
-                    elif 'results' in json_response: # Parse results of parcel ID lookup
-                        json_results = json_response['results']
-                        parcel = {}
-                        if 'us_census_tract' in json_results:
-                            if 'name' in json_results['us_census_tract']:
-                                self.parcel_data['Census tract'] = json_results['us_census_tract']['name']
-                                parcel['parcel_data'] = {'Census tract': json_results['us_census_tract']['name']}
-                        parcels.append(parcel)
+                        elif 'results' in json_response: # Parse results of parcel ID lookup
+                            json_results = json_response['results']
+                            parcel = {}
+                            if 'us_census_tract' in json_results:
+                                if 'name' in json_results['us_census_tract']:
+                                    self.parcel_data['Census tract'] = json_results['us_census_tract']['name']
+                                    parcel['parcel_data'] = {'Census tract': json_results['us_census_tract']['name']}
+                            parcels.append(parcel)
+                else:
+                    parcels = []
             else:
                 parcels = query_db(search_type, search_term)
                 if len(parcels) == 1:
