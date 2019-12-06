@@ -16,7 +16,8 @@ BASE_QUERY = """SELECT ST_X(mm.geom_centroid) x_wgs84,
     db.block_number,
     dbg.block_group_name,
     c.city_name,
-    ct.census_tract_number
+    ct.census_tract_number,
+    mm.d3_id AS d3_id
     FROM parcel.master mm inner join parcel_admin_details a1 on mm.d3_id=a1.d3_id
     LEFT JOIN vacancy a2 on mm.d3_id=a2.d3_id
     LEFT JOIN parcel_tax_and_values ptv on mm.d3_id=ptv.d3_id
