@@ -81,6 +81,8 @@ class IndexView(View):
 
             WPRDC_LOOKUP = False
             if not PRODUCTION:
+                voters = []
+                aggregated_voters = []
                 if WPRDC_LOOKUP:
                     response = requests.get(url)
                     if response.status_code != 200:
