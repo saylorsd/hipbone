@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
@@ -134,3 +134,73 @@ class IndexView(View):
             }
         post_response = render(request, self.template_name, self.context)
         return post_response
+
+def get_parcels(request):
+    """
+    Look up the parcel and return its parameters in JSON format for easy asynchronous
+    modification of the otherwise unchanged HTML page.
+    """
+    if not request.user.is_authenticated:
+        return {'error_message': "User is not logged in and therefore unable to get this data. Try the /login/ URL."}
+
+    error_message = ''
+    search_type = request.GET.get('search_type')
+    search_term = request.GET.get('parcel_search_term')
+    ic(search_type, search_term)
+    #if search_term in [None, '']:
+    #    data = {'msg': 'No results.'}
+    #    return JsonResponse(data)
+    if search_type != 'parcel':
+        search_type = 'address'
+    ic(search_type)
+
+    if PRODUCTION:
+        parcels = query_db(search_type, search_term)
+    else:
+        parcels = [
+                {'last_sale_amount': 13031.00,
+                'last_sale_date': "2010-06-17",
+                'vacant_percent': 50, # Check whether this is really stored as a percent or a ratio in the databse.
+                'num_vacant': 3,
+                'num_occupied': 3,
+                'block_number': 'ITS-UI-LIKE'}
+                ] # Eventually provide some actual results in here for testing purposes.
+
+    data = { 'search_type': search_type,
+            'search_term': search_term,
+            'parcels': parcels,
+            'json_parcels': json.dumps(parcels), # This is only here to be passed
+            # back to weasy_pdf.py, avoiding further queries. If Django templating
+            # supported something like the tojson filter, we could just use that
+            # in the template ({{ parcels|tojson|safe }}) instead.
+            'error_message': error_message,
+            'output_format': 'html'
+        }
+    return JsonResponse(data)
+
+
+class NewIndexView(View):
+
+    def __init__(self):
+        self.template_name = 'hipbone/ajax-index.html'
+        self.msg = ''
+        self.context = { 'parcels': [],
+                'msg': self.msg,
+                'error_message': '',
+                'output_format': 'html'
+            }
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('%s?next=%s' % ('/hipbone/login/', request.path))
+
+        return render(request, self.template_name, self.context)
+
+    # When relying on asynchronous requests, the index should not need
+    # to field any POST requests.
+
+    # HOWEVER, we could still implment it to support JavaScript-free
+    # browsing.
+    #def post(self, request, *args, **kwargs):
+    #    if not request.user.is_authenticated:
+    #        return redirect('%s?next=%s' % ('/hipbone/login/', request.path))

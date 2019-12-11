@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Housing Portal{% endblock %}
+{% block stylesheet %}
+
+<style>
+/*Section -1: Error Reports */
+#error {
+    padding: 10px;
+    color: red;
+}
+
+#search-form-wrapper {
+    margin: 10px;
+}
+/* Background image */
+.background-image {
+  width: 100%;
+  height: 60vh;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-image: url(/static/hipbone/images/search-header_house-search.png);
+}
+
+.search_button {
+    background-color: #2F2F2F; /* Dark Grey */
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    width: 49%;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.align_right {
+    position: absolute;
+    right: 0;
+}
+
+#id_address {
+    width: 100%
+}
+
+.overlay {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 1;
+    transition: .5s ease;
+    background-color: #fff;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+    function activate_overlay(bool,element_id) {
+        document.getElementById(element_id).style.opacity=(bool?0.5:1.0);
+    }
+
+    function refresh_parcel() {
+        activate_overlay(true,"overlay_data");
+        var parcel_search_term = document.getElementsByName("address")[0].value;
+        var button_value = $("button[type=submit][clicked=true]").val();
+        $.ajax({
+        url: '/ajax/get_parcels/',
+        data: {
+            'parcel_search_term': parcel_search_term,
+            'search_type': button_value
+        },
+        dataType: 'json',
+        success: function (data) {
+            $("#last_sale_amount").html(data.parcels[0].last_sale_amount);
+            $("#last_sale_date").html(data.parcels[0].last_sale_date);
+            $("#vacancy_rate").html(data.parcels[0].vacant_percent);
+            activate_overlay(false,"overlay_data");
+            $("#one_result").show();
+            }
+        });
+    };
+
+    $("#one_result").hide();
+
+    $("form").submit(function(e) {
+        console.log('Hey! Somebody pushed a button!');
+        refresh_parcel();
+        e.preventDefault(); // Don't submit the form.
+    });
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="background-image">
+    <div class="center-text search-header">Search by parcel ID or address</div>
+    <div class="center"><p><small>{{ msg }}</small></p></div>
+    <div id="error"><p>{{ error_message }}</p></div>
+    <div id="search-form-wrapper">
+        <form id="parcel_search_form" method="post">
+            {% csrf_token %}
+            <!--{{ address_form.non_field_errors }}-->
+            <div class="center" style="position:relative;">
+                <br>
+                <input type="text" name="address" value="" required="" id="id_address">
+                <!--input class="address_form" type="text" name="address" value="" maxlength="255" required="" id="id_address"-->
+                <br>
+                <!--{{ address_form.address.errors }}<br>
+                    {{ address_form.address }}<br>-->
+                <span>
+                    <button class="search_button" id="address_button" name="search_type" type="submit" value="address">By Address</button>
+                    <button class="search_button align_right" id="parcel_id_button" name="search_type" type="submit" value="parcel">By Parcel ID</button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+<br><br>
+{% include "hipbone/ajax-results.html" %}
+{% endblock %}

@@ -9,6 +9,8 @@ from . import weasy_pdf
 
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^beta/$', views.NewIndexView.as_view(), name='test_index'),
+    url(r'^ajax/get_parcels/$', views.get_parcels, name='get_parcels'),
     url(r'^pdf/', weasy_pdf.generate_pdf, name='pdf'),
     #path('pdf/', pdf_view.make_pdf, name='pdf'),
     url(r'^login/', views.user_login, name='login'),
