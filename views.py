@@ -163,7 +163,10 @@ def get_parcels(request):
                 'vacant_percent': 50, # Check whether this is really stored as a percent or a ratio in the databse.
                 'num_vacant': 3,
                 'num_occupied': 3,
-                'block_number': 'ITS-UI-LIKE'}
+                'block_number': 'ITS-UI-LIKE',
+                'prop_addr': '49 King',
+                'city_name': 'Detroit',
+                'prop_parcelnum': '01002779'}
                 ] # Eventually provide some actual results in here for testing purposes.
 
     data = { 'search_type': search_type,

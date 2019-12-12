@@ -9,10 +9,8 @@
     </div>
     <div id="single-parcel-results" style="clear: both;">
         <div id="orange-result-box">
-        {% for parcel in parcels %}
-            <span class="bold">{{ parcel.prop_addr }}</span>, {{ parcel.city_name }}<br>
-            Parcel ID: {{ parcel.prop_parcelnum }}<br>
-        {% endfor %}
+            <span class="bold" id="prop_addr">{{ parcel.prop_addr }}</span>, <span id="city_name">{{ parcel.city_name }}</span><br>
+            Parcel ID: <span id="prop_parcelnum">{{ parcel.prop_parcelnum }}</span><br>
         </div>
     </div>
     <div id="overlay_data" class="overlay">

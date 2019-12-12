@@ -77,6 +77,9 @@
         },
         dataType: 'json',
         success: function (data) {
+            $("#prop_addr").html(data.parcels[0].prop_addr);
+            $("#city_name").html(data.parcels[0].city_name);
+            $("#prop_parcelnum").html(data.parcels[0].prop_parcelnum);
             $("#last_sale_amount").html(data.parcels[0].last_sale_amount);
             $("#last_sale_date").html(data.parcels[0].last_sale_date);
             $("#vacancy_rate").html(data.parcels[0].vacant_percent);
