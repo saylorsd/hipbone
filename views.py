@@ -8,6 +8,7 @@ from .forms import LoginForm, AddressForm
 
 import requests, json
 from datetime import datetime
+from collections import OrderedDict
 
 from .models import UserLoginActivity
 from .tracking_util import save_activity
@@ -222,17 +223,19 @@ def get_parcels(request):
         voter['voter_age_by_years_end'] = current_year - voter['voter_birth_year']
     standard_voters = convert_to_standard_model(voters, ['d3_year', 'voter_age_by_years_end'])
 
-    ownership_fields = ['year', 'owner_name', 'owner_address']
-    ownership_display_name_by_field = {'year': "Year", 'owner_name': "Owner", 'owner_address': "Owner Address"}
+    ownership_name_by_field = OrderedDict([('year', "Year"),
+        ('owner_name', "Owner"),
+        ('owner_address', "Owner Address")])
+    ownership_fields = list(ownership_name_by_field.keys())
     standard_ownership = convert_to_standard_model(ownership, ownership_fields)
-    ownership_stacked = stack(ownership, ownership_display_name_by_field)
+    ownership_stacked = stack(ownership, ownership_name_by_field)
     ownership_vertical = {'data': ownership_stacked, 'fields': ownership_fields}
 
-    demolitions_name_by_field = {'demo_contractor': "Contractor Name",
-            'demo_price': "Price", # $###.##
-            'demo_funding_source': "Funding Source",
-            'demo_date': "Date", # MM/DD/YYYY
-            'demo_was_commercial': "Commerical Demolition"} # Yes/No
+    demolitions_name_by_field = OrderedDict([('demo_contractor', "Contractor Name"),
+            ('demo_price', "Price"), # $###.##
+            ('demo_funding_source', "Funding Source"),
+            ('demo_date', "Date"), # MM/DD/YYYY
+            ('demo_was_commercial', "Commerical Demolition")]) # Yes/No
     demolitions_stacked = stack(demolitions, demolitions_name_by_field)
 
     vacancy_name_by_field = OrderedDict([('d3_year', "Year"),
