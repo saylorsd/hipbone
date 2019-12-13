@@ -210,6 +210,11 @@ def get_parcels(request):
             'demo_funding_source': "The CvC Foundation",
             'demo_date': "07/18/2016",
             'demo_was_commercial': "No"}]
+        vacancy = [{'d3_year': 2018,
+            'quarter': "Q1",
+            'vacant_percent': "33.3%",
+            'num_vacant': 4,
+            'num_occupied': 8}]
 
     voters = voters[::-1]
     current_year = datetime.now().year
@@ -230,6 +235,12 @@ def get_parcels(request):
             'demo_was_commercial': "Commerical Demolition"} # Yes/No
     demolitions_stacked = stack(demolitions, demolitions_name_by_field)
 
+    vacancy_name_by_field = OrderedDict([('d3_year', "Year"),
+        ('quarter', "Quarter"),
+        ('vacant_percent', "Percent Vacant"), # ##.#%
+        ('num_vacant', "Number Vacant"),
+        ('num_occupied', "Number Occupied")])
+    vacancy_stacked = stack(vacancy, vacancy_name_by_field)
 
     data = { 'search_type': search_type,
             'search_term': search_term,
@@ -242,6 +253,7 @@ def get_parcels(request):
             'ownership': standard_ownership,
             'ownership_vertical': ownership_vertical,
             'demolitions': demolitions_stacked,
+            'vacancy': vacancy_stacked,
             'aggregated_voters': aggregated_voters,
             'error_message': error_message,
             'output_format': 'html'
