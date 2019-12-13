@@ -106,6 +106,8 @@
             $("#last_sale_date").html(data.parcels[0].last_sale_date);
             $("#vacancy_rate").html(data.parcels[0].vacant_percent);
             populate_table(data.voters, "#voters-table");
+            populate_table(data.ownership, "#ownership-horizontal-table");
+            populate_table(data.ownership_vertical.data, "#ownership-table");
             activate_overlay(false,"overlay_data");
             $("#one_result").show();
             }

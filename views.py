@@ -55,6 +55,9 @@ def convert_to_standard_model(table, fields):
     preserve order)."""
     return [enumerated_row(row, fields) for row in table]
 
+def stack(table, name_by_field):
+    return [{0 : name, 1 : row[field]} for row in table for field, name in name_by_field.items()]
+
 class IndexView(View):
 
     def __init__(self):
@@ -200,12 +203,21 @@ def get_parcels(request):
             {'d3_year': 2019, 'voter_birth_year': 1968},
             {'d3_year': 2019, 'voter_birth_year': 1990}]
         aggregated_voters = []
+        ownership = [{'year': 2019, 'owner_name': 'Jetson,George', 'owner_address': "019409013 Space Way, Satellite B87ZZ9"},
+                {'year': 2009, 'owner_name': 'Bird,Big', 'owner_address': "123 Sesame St, New York, NY"}]
 
     voters = voters[::-1]
     current_year = datetime.now().year
     for voter in voters:
         voter['voter_age_by_years_end'] = current_year - voter['voter_birth_year']
     standard_voters = convert_to_standard_model(voters, ['d3_year', 'voter_age_by_years_end'])
+
+    ownership_fields = ['year', 'owner_name', 'owner_address']
+    ownership_display_name_by_field = {'year': "Year", 'owner_name': "Owner", 'owner_address': "Owner Address"}
+    standard_ownership = convert_to_standard_model(ownership, ownership_fields)
+    ownership_stacked = stack(ownership, ownership_display_name_by_field)
+    ic(ownership_stacked)
+    ownership_vertical = {'data': ownership_stacked, 'fields': ownership_fields}
 
     data = { 'search_type': search_type,
             'search_term': search_term,
@@ -215,6 +227,8 @@ def get_parcels(request):
             # supported something like the tojson filter, we could just use that
             # in the template ({{ parcels|tojson|safe }}) instead.
             'voters': standard_voters,
+            'ownership': standard_ownership,
+            'ownership_vertical': ownership_vertical,
             'aggregated_voters': aggregated_voters,
             'error_message': error_message,
             'output_format': 'html'
