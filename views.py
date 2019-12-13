@@ -205,6 +205,11 @@ def get_parcels(request):
         aggregated_voters = []
         ownership = [{'year': 2019, 'owner_name': 'Jetson,George', 'owner_address': "019409013 Space Way, Satellite B87ZZ9"},
                 {'year': 2009, 'owner_name': 'Bird,Big', 'owner_address': "123 Sesame St, New York, NY"}]
+        demolitions = [{'demo_contractor': "Biff & Sully",
+            'demo_price': "$123.58",
+            'demo_funding_source': "The CvC Foundation",
+            'demo_date': "07/18/2016",
+            'demo_was_commercial': "No"}]
 
     voters = voters[::-1]
     current_year = datetime.now().year
@@ -216,8 +221,15 @@ def get_parcels(request):
     ownership_display_name_by_field = {'year': "Year", 'owner_name': "Owner", 'owner_address': "Owner Address"}
     standard_ownership = convert_to_standard_model(ownership, ownership_fields)
     ownership_stacked = stack(ownership, ownership_display_name_by_field)
-    ic(ownership_stacked)
     ownership_vertical = {'data': ownership_stacked, 'fields': ownership_fields}
+
+    demolitions_name_by_field = {'demo_contractor': "Contractor Name",
+            'demo_price': "Price", # $###.##
+            'demo_funding_source': "Funding Source",
+            'demo_date': "Date", # MM/DD/YYYY
+            'demo_was_commercial': "Commerical Demolition"} # Yes/No
+    demolitions_stacked = stack(demolitions, demolitions_name_by_field)
+
 
     data = { 'search_type': search_type,
             'search_term': search_term,
@@ -229,6 +241,7 @@ def get_parcels(request):
             'voters': standard_voters,
             'ownership': standard_ownership,
             'ownership_vertical': ownership_vertical,
+            'demolitions': demolitions_stacked,
             'aggregated_voters': aggregated_voters,
             'error_message': error_message,
             'output_format': 'html'
