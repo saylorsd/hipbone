@@ -74,10 +74,16 @@
             console.log(cols);
             $(tbody).append('<tr><td colspan="' + cols + '">No results.</td></tr>');
         } else {
-            // Create tr elements for tbody from data (list of key-value pairs)
+            // Create tr elements for tbody from data (a JavaScript object with
+            // an arbitrary number of key-value pairs)
             data.forEach(function (datum) {
-                $(tbody).append("<tr><td>" + datum[0] + "</td><td>" + datum[1] + "</td></tr>");
-            })
+                var row = "<tr>";
+                for (var key of Object.keys(datum)) {
+                    row += "<td>" + datum[key] + "</td>";
+                };
+                row += "</tr>";
+                $(tbody).append(row);
+            });
         };
     };
 
