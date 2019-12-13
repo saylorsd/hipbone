@@ -65,6 +65,22 @@
         document.getElementById(element_id).style.opacity=(bool?0.5:1.0);
     }
 
+    function populate_table(data, table_id) {
+        var thead = table_id + " thead";
+        var cols = $(thead).length;
+        $(table_id + " > tbody").empty(); // Try replacing this with $(table_id).find("tbody tr").remove();
+        var tbody = table_id + " tbody";
+        if (data.length == 0) {
+            console.log(cols);
+            $(tbody).append('<tr><td colspan="' + cols + '">No results.</td></tr>');
+        } else {
+            // Create tr elements for tbody from data (list of key-value pairs)
+            data.forEach(function (datum) {
+                $(tbody).append("<tr><td>" + datum[0] + "</td><td>" + datum[1] + "</td></tr>");
+            })
+        };
+    };
+
     function refresh_parcel() {
         activate_overlay(true,"overlay_data");
         var parcel_search_term = document.getElementsByName("address")[0].value;
@@ -83,6 +99,7 @@
             $("#last_sale_amount").html(data.parcels[0].last_sale_amount);
             $("#last_sale_date").html(data.parcels[0].last_sale_date);
             $("#vacancy_rate").html(data.parcels[0].vacant_percent);
+            populate_table(data.voters, "#voters-table");
             activate_overlay(false,"overlay_data");
             $("#one_result").show();
             }

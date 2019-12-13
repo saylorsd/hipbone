@@ -7,6 +7,7 @@ from django.conf import settings
 from .forms import LoginForm, AddressForm
 
 import requests, json
+from datetime import datetime
 
 from .models import UserLoginActivity
 from .tracking_util import save_activity
@@ -38,6 +39,21 @@ def user_login(request):
         form = LoginForm()
     return render(request, 'hipbone/login.html', {'form': form})
 
+def enumerated_row(row, fields):
+    return {k: row[field] for k, field in enumerate(fields)}
+
+def convert_to_standard_model(table, fields):
+    """To simplify representation of data tables (making the JavaScript
+    views simpler), convert the original table, which is in a
+    list-of-dicts form, where the key for each field is a name,
+    coming from the SQL query, hinting at the meaning of the field,
+    to a different list-of-dicts form, where the keys are replaced by
+    integers (0 through n-1, where n is the number of fields).
+
+    This ensures that the order of the JavaScript knows what order
+    the fields should be in (since Python dicts do not by themselves
+    preserve order)."""
+    return [enumerated_row(row, fields) for row in table]
 
 class IndexView(View):
 
@@ -156,6 +172,13 @@ def get_parcels(request):
 
     if PRODUCTION:
         parcels = query_db(search_type, search_term)
+        if len(parcels) > 0:
+            d3_id = parcels[0]['d3_id']
+            voters = query_voters(d3_id)
+            aggregated_voters = aggregate_voters(d3_id)
+        else:
+            voters = []
+            aggregated_voters = []
     else:
         parcels = [
                 {'last_sale_amount': 13031.00,
@@ -168,6 +191,21 @@ def get_parcels(request):
                 'city_name': 'Detroit',
                 'prop_parcelnum': '01002779'}
                 ] # Eventually provide some actual results in here for testing purposes.
+        voters = [{'d3_year': 2019, 'voter_birth_year': 1944},
+            {'d3_year': 2019, 'voter_birth_year': 1947},
+            {'d3_year': 2019, 'voter_birth_year': 1947},
+            {'d3_year': 2019, 'voter_birth_year': 1967},
+            {'d3_year': 2019, 'voter_birth_year': 1967},
+            {'d3_year': 2019, 'voter_birth_year': 1968},
+            {'d3_year': 2019, 'voter_birth_year': 1968},
+            {'d3_year': 2019, 'voter_birth_year': 1990}]
+        aggregated_voters = []
+
+    voters = voters[::-1]
+    current_year = datetime.now().year
+    for voter in voters:
+        voter['voter_age_by_years_end'] = current_year - voter['voter_birth_year']
+    standard_voters = convert_to_standard_model(voters, ['d3_year', 'voter_age_by_years_end'])
 
     data = { 'search_type': search_type,
             'search_term': search_term,
@@ -176,6 +214,8 @@ def get_parcels(request):
             # back to weasy_pdf.py, avoiding further queries. If Django templating
             # supported something like the tojson filter, we could just use that
             # in the template ({{ parcels|tojson|safe }}) instead.
+            'voters': standard_voters,
+            'aggregated_voters': aggregated_voters,
             'error_message': error_message,
             'output_format': 'html'
         }
