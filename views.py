@@ -216,6 +216,15 @@ def get_parcels(request):
             'vacant_percent': "33.3%",
             'num_vacant': 4,
             'num_occupied': 8}]
+        blight_violations = [{"ticket_number": "781-Y-TCN",
+            "agency_name": "Nosiness Bureau",
+            "violator_name": "Guy Smiley",
+            "violator_mailing_address": "129 Sesame St, New York, NY, 10001-3823, USA, Earth",
+            "violation_date": "01/01/2011",
+            "violation_code_and_description": "408: Blighted teapot",
+            "disposition": "Cracked",
+            "balance_due": "$4.19"}]
+
 
     voters = voters[::-1]
     current_year = datetime.now().year
@@ -245,6 +254,16 @@ def get_parcels(request):
         ('num_occupied', "Number Occupied")])
     vacancy_stacked = stack(vacancy, vacancy_name_by_field)
 
+    blight_violations_name_by_field = OrderedDict([("ticket_number", "Ticket Number"),
+        ("agency_name", "Agency Name"),
+        ("violator_name", "Violator Name"),
+        ("violator_mailing_address", "Violator Mailing Address"),
+        ("violation_date", "Violation Date"),
+        ("violation_code_and_description", "Violation"), # Combine violation_code, violation_description like this f"{violation_code}: {violation_description}"
+        ("disposition", "Disposition"),
+        ("balance_due", "Balance Due")])
+    blight_violations_stacked = stack(blight_violations, blight_violations_name_by_field)
+
     data = { 'search_type': search_type,
             'search_term': search_term,
             'parcels': parcels,
@@ -257,6 +276,7 @@ def get_parcels(request):
             'ownership_vertical': ownership_vertical,
             'demolitions': demolitions_stacked,
             'vacancy': vacancy_stacked,
+            'blight_violations': blight_violations_stacked,
             'aggregated_voters': aggregated_voters,
             'error_message': error_message,
             'output_format': 'html'
