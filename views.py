@@ -257,6 +257,13 @@ def get_parcels(request):
 
 
         foreclosures= [2009, 2012, 2019]
+        property_sales = [{"sale_date": "03/04/2010",
+            "sale_price": "$101,010.10",
+            "grantor": "Scrooge McDuck",
+            "grantee": "Edward Slock",
+            "sale_terms": " ",
+            "verified_by": "Mr. E. Auditor",
+            "sale_instrument": "Contract"}]
 
     voters = voters[::-1]
     current_year = datetime.now().year
@@ -309,6 +316,15 @@ def get_parcels(request):
         ("contractor_name", "Contractor Name")])
     building_permits_stacked = stack(building_permits, building_permits_name_by_field)
 
+    property_sales_name_by_field = OrderedDict([("sale_date", "Sale Date"),
+        ("sale_price", "Sale Price"),
+        ("grantor", "Grantor"),
+        ("grantee", "Grantee"),
+        ("sale_terms", "Sale Terms"),
+        ("verified_by", "Verified By"),
+        ("sale_instrument", "Sale Instrument")])
+    property_sales_stacked = stack(property_sales, property_sales_name_by_field)
+
     foreclosures_horizontal = horizontalize_over_years(foreclosures, current_year) # A possible
     # problem with this approach is that the JavaScript may not obtain the number of
     # columns from the base HTML template.
@@ -328,6 +344,7 @@ def get_parcels(request):
             'blight_violations': blight_violations_stacked,
             'building_permits': building_permits_stacked,
             'tax_foreclosures': foreclosures_horizontal,
+            'property_sales': property_sales_stacked,
             'aggregated_voters': aggregated_voters,
             'error_message': error_message,
             'output_format': 'html'
