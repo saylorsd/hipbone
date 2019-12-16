@@ -125,6 +125,8 @@ table {
             populate_table(data.blight_violations, "#blight-violations-table");
 
             populate_table(data.tax_foreclosures, "#tax-foreclosures-table", "center-text");
+            var foreclosures_width = Object.keys(data.tax_foreclosures[0]).length; // Works under ES5+-capable browsers.
+            $("#tax-foreclosures-table th").attr('colspan',foreclosures_width);
 
             activate_overlay(false,"overlay_data");
             $("#one_result").show();
