@@ -40,6 +40,7 @@ def user_login(request):
         form = LoginForm()
     return render(request, 'hipbone/login.html', {'form': form})
 
+# BEGIN Table-formatting code #
 def enumerated_row(row, fields):
     return {k: row[field] for k, field in enumerate(fields)}
 
@@ -58,6 +59,24 @@ def convert_to_standard_model(table, fields):
 
 def stack(table, name_by_field):
     return [{0 : name, 1 : row[field]} for row in table for field, name in name_by_field.items()]
+
+def horizontalize_over_years(years, current_year):
+    check_mark = "&#10003;"
+    rows = []
+    years_per_row = 16
+    first_year = 2009
+    while first_year <= current_year:
+        last_year = min(current_year, first_year + years_per_row - 1)
+        row1 = {}
+        row2 = {}
+        for k,year in enumerate(range(first_year, last_year + 1)):
+            row1[k] = str(year)[-2:]
+            row2[k] = check_mark if year in years else "&nbsp;" # A non-breaking space is used
+            # here to avoid the table row height collapsing.
+        rows += [row1, row2]
+        first_year += years_per_row
+    return rows
+# END Table-formatting code #
 
 class IndexView(View):
 
@@ -225,6 +244,7 @@ def get_parcels(request):
             "disposition": "Cracked",
             "balance_due": "$4.19"}]
 
+        foreclosures= [2009, 2012, 2019]
 
     voters = voters[::-1]
     current_year = datetime.now().year
@@ -264,6 +284,10 @@ def get_parcels(request):
         ("balance_due", "Balance Due")])
     blight_violations_stacked = stack(blight_violations, blight_violations_name_by_field)
 
+    foreclosures_horizontal = horizontalize_over_years(foreclosures, current_year) # A possible
+    # problem with this approach is that the JavaScript may not obtain the number of
+    # columns from the base HTML template.
+
     data = { 'search_type': search_type,
             'search_term': search_term,
             'parcels': parcels,
@@ -277,6 +301,7 @@ def get_parcels(request):
             'demolitions': demolitions_stacked,
             'vacancy': vacancy_stacked,
             'blight_violations': blight_violations_stacked,
+            'tax_foreclosures': foreclosures_horizontal,
             'aggregated_voters': aggregated_voters,
             'error_message': error_message,
             'output_format': 'html'
