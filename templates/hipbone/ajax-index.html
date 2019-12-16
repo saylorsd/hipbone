@@ -144,6 +144,9 @@ table {
         e.preventDefault(); // Don't submit the form.
     });
 
+    $("thead").find("th").on("click", function() {       // When thead is clicked,
+        $(this).closest("table").find("tbody").toggle(); // collapse the table.
+    });
 </script>
 {% endblock %}
 
