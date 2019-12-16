@@ -12,6 +12,7 @@ from collections import OrderedDict
 
 from .models import UserLoginActivity
 from .tracking_util import save_activity
+from .queries_v0 import query_db as query_db_v0, query_voters as query_voters_v0, aggregate_voters as aggregate_voters_v0
 from .queries import query_db, query_voters, aggregate_voters
 from .parameters.local import PRODUCTION
 
