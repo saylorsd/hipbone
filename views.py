@@ -243,6 +243,18 @@ def get_parcels(request):
             "violation_code_and_description": "408: Blighted teapot",
             "disposition": "Cracked",
             "balance_due": "$4.19"}]
+        building_permits = [{"permit_no": "ICU71689",
+            "permit_issued": "01/01/2018",
+            "permit_completed": "02/02/2019",
+            "permit_status": "Complete",
+            "estimated_cost": "$78.13",
+            "bld_permit_type": "Construction",
+            "bld_permit_desc": "Building a tiny house",
+            "bld_type_use": "Residential",
+            "owner_name": "Little Bird",
+            "owner_address": "123B Sesame Street, New York, NY",
+            "contractor_name": "Biff"} ]
+
 
         foreclosures= [2009, 2012, 2019]
 
@@ -284,6 +296,19 @@ def get_parcels(request):
         ("balance_due", "Balance Due")])
     blight_violations_stacked = stack(blight_violations, blight_violations_name_by_field)
 
+    building_permits_name_by_field = OrderedDict([("permit_no", "Permit Number"),
+        ("permit_issued", "Permit Issued"),
+        ("permit_completed", "Permit Completed"),
+        ("permit_status", "Permit Status"),
+        ("estimated_cost", "Estimated Cost"),
+        ("bld_permit_type", "Permit Type"),
+        ("bld_permit_desc", "Permit Description"),
+        ("bld_type_use", "Building Use Type"),
+        ("owner_name", "Owner"), # owner_first_name, owner_last_name ==> Display as (FIRST if exists) (LAST)
+        ("owner_address", "Owner Address"), # [ ] Some comments on some of these building permit fields still need to be copied over from the specs.
+        ("contractor_name", "Contractor Name")])
+    building_permits_stacked = stack(building_permits, building_permits_name_by_field)
+
     foreclosures_horizontal = horizontalize_over_years(foreclosures, current_year) # A possible
     # problem with this approach is that the JavaScript may not obtain the number of
     # columns from the base HTML template.
@@ -301,6 +326,7 @@ def get_parcels(request):
             'demolitions': demolitions_stacked,
             'vacancy': vacancy_stacked,
             'blight_violations': blight_violations_stacked,
+            'building_permits': building_permits_stacked,
             'tax_foreclosures': foreclosures_horizontal,
             'aggregated_voters': aggregated_voters,
             'error_message': error_message,
