@@ -198,6 +198,13 @@ def get_parcels(request):
 
     if PRODUCTION:
         parcels = query_db(search_type, search_term)
+        ownership = []
+        demolitions = []
+        vacancy = []
+        blight_violations = []
+        building_permits = []
+        foreclosures = []
+        property_sales = []
         if len(parcels) > 0:
             d3_id = parcels[0]['d3_id']
             voters = query_voters(d3_id)
