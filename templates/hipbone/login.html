@@ -95,6 +95,7 @@ span.psw {
         <form action="." method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
         <p><input type="submit" value="LOG IN"></p>
         </form>
     </div>

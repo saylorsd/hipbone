@@ -22,6 +22,9 @@ from icecream import ic
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
+        next_page = request.POST.get('next')
+        if next_page == '': # If the URL used for logging in has no next parameter,
+            next_page = '/' # just default to redirecting to the root URL.
         if form.is_valid():
             cd = form.cleaned_data
             user = authenticate(request,
@@ -31,7 +34,7 @@ def user_login(request):
                 if user.is_active:
                     login(request, user)
                     save_activity(request)
-                    return HttpResponseRedirect('/hipbone')
+                    return HttpResponseRedirect(next_page)
                 else:
                     return HttpResponse('Disabled account')
             else:
