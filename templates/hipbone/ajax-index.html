@@ -73,13 +73,17 @@ table {
         document.getElementById(element_id).style.opacity=(bool?0.5:1.0);
     }
 
-    function populate_table(data, table_id) {
+    function populate_table(data, table_id, td_class) {
         var thead = table_id + " thead";
         var cols = $(thead).length;
         $(table_id + " > tbody").empty(); // Try replacing this with $(table_id).find("tbody tr").remove();
         var tbody = table_id + " tbody";
+        if (td_class) {
+            var td_class_str = " class='" + td_class + "'";
+        } else  {
+            var td_class_str = "";
+        };
         if (data.length == 0) {
-            console.log(cols);
             $(tbody).append('<tr><td colspan="' + cols + '">No results.</td></tr>');
         } else {
             // Create tr elements for tbody from data (a JavaScript object with
@@ -87,7 +91,7 @@ table {
             data.forEach(function (datum) {
                 var row = "<tr>";
                 for (var key of Object.keys(datum)) {
-                    row += "<td>" + datum[key] + "</td>";
+                    row += "<td" + td_class_str + ">" + datum[key] + "</td>";
                 };
                 row += "</tr>";
                 $(tbody).append(row);
