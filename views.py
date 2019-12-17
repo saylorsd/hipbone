@@ -355,10 +355,12 @@ def get_parcels(request):
     data = { 'search_type': search_type,
             'search_term': search_term,
             'parcels': parcels,
-            'json_parcels': json.dumps(parcels), # This is only here to be passed
+            #'json_parcels': json.dumps(parcels), # This is only here to be passed
             # back to weasy_pdf.py, avoiding further queries. If Django templating
             # supported something like the tojson filter, we could just use that
             # in the template ({{ parcels|tojson|safe }}) instead.
+                # json_parcels commented out since it was throwing an error pertaining
+                # to a variable with type date being not JSON-serializable.
             'voters': standard_voters,
             'ownership': ownership_stacked,
             'demolitions': demolitions_stacked,
