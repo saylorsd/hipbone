@@ -75,6 +75,10 @@ def aggregate_voters(d3_id):
     query = "SELECT d3_year, ROUND(voter_birth_year/10)*10::int AS decade, COUNT(id) AS count FROM voters WHERE d3_id = {} GROUP BY decade, d3_year ORDER BY d3_year, decade".format(d3_id)
     return execute(query)
 
+def query_ownership(d3_id):
+    query = "SELECT d3_year, CONCAT_WS('; ', owner_name, owner_name2) AS owner_name, CONCAT(owner_street_address, ', ', owner_city, ', ', owner_state, ' ', owner_zip_code, ' ', owner_country) AS owner_address FROM ownership WHERE d3_id = {} ORDER BY d3_year".format(d3_id)
+    return execute(query)
+
 def query_voters(d3_id):
     query = "SELECT d3_year, voter_birth_year FROM voters WHERE d3_id = {} ORDER BY d3_year, voter_birth_year".format(d3_id)
     # return execute(query)
