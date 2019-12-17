@@ -73,6 +73,16 @@ table {
         document.getElementById(element_id).style.opacity=(bool?0.5:1.0);
     }
 
+    $(document).ready(function() {
+        $("form").submit(function() {
+            var val = $("button[type=submit][clicked=true]").val();
+        });
+        $("form button[type=submit]").click(function() {
+            $("button[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+    });
+
     function populate_table(data, table_id, td_class) {
         var thead = table_id + " thead";
         var cols = $(thead).length;
