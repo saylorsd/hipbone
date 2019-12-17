@@ -99,17 +99,15 @@ def query_demolitions(table_config, d3_id):
     query = f"SELECT demo_contractor, demo_price::NUMERIC::MONEY, demo_funding_source, demo_timestamp AS demo_date, (CASE WHEN was_commercial IS NOT NULL THEN 'Yes' ELSE 'No' END) AS demo_was_commercial FROM {table_config['table_name']} WHERE {d3_id} = ANY(d3_id) ORDER BY demo_date"
     return execute(query)
 
-def query_ownership(d3_id):
-    query = "SELECT d3_year, CONCAT_WS('; ', owner_name, owner_name2) AS owner_name, CONCAT(owner_street_address, ', ', owner_city, ', ', owner_state, ' ', owner_zip_code, ' ', owner_country) AS owner_address FROM ownership WHERE d3_id = {} ORDER BY d3_year".format(d3_id)
+def query_ownership(d3_ids):
+    ids_sql_list = ', '.join([str(d3_id) for d3_id in d3_ids])
+    query = f"SELECT d3_year, CONCAT_WS('; ', owner_name, owner_name2) AS owner_name, CONCAT(owner_street_address, ', ', owner_city, ', ', owner_state, ' ', owner_zip_code, ' ', owner_country) AS owner_address FROM ownership WHERE d3_id IN ({ids_sql_list}) ORDER BY d3_year DESC"
     return execute(query)
 
-def query_voters(d3_id):
-    query = "SELECT d3_year, voter_birth_year FROM voters WHERE d3_id = {} ORDER BY d3_year, voter_birth_year".format(d3_id)
-    # return execute(query)
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        rows = dictfetchall(cursor)
-    return rows
+def query_voters(d3_ids):
+    ids_sql_list = ', '.join([str(d3_id) for d3_id in d3_ids])
+    query = f"SELECT d3_year, voter_birth_year FROM voters WHERE d3_id IN ({ids_sql_list}) ORDER BY d3_year, voter_birth_year"
+    return execute(query)
 
 def query_d3_table(table_config, d3_ids):
     """This is a general querying function which takes all the fields specified in the table_config and

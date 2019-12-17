@@ -255,10 +255,10 @@ def get_parcels(request):
             blight_violations = query_blight_violations(blight_violations_config, d3_id)
             building_permits = query_building_permits(building_permits_config, d3_id)
             demolitions = query_demolitions(demolitions_config, d3_id)
-            voters = query_voters(d3_id)
+            voters = query_voters(d3_ids)
             aggregated_voters = aggregate_voters(d3_id)
             vacancy = query_d3_table(vacancy_config, d3_ids)
-            ownership = query_ownership(d3_id)
+            ownership = query_ownership(d3_ids)
         else:
             aggregated_voters = []
             blight_violations = []
