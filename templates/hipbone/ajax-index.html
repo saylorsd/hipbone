@@ -118,8 +118,7 @@ table {
             $("#last_sale_date").html(data.parcels[0].last_sale_date);
             $("#vacancy_rate").html(data.parcels[0].vacant_percent);
             populate_table(data.voters, "#voters-table");
-            populate_table(data.ownership, "#ownership-horizontal-table");
-            populate_table(data.ownership_vertical.data, "#ownership-table");
+            populate_table(data.ownership, "#ownership-table");
             populate_table(data.demolitions, "#demolitions-table");
             populate_table(data.vacancy, "#vacancy-table");
             populate_table(data.blight_violations, "#blight-violations-table");

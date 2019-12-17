@@ -298,8 +298,8 @@ def get_parcels(request):
         ('owner_address', "Owner Address")])
     ownership_fields = list(ownership_name_by_field.keys())
     standard_ownership = convert_to_standard_model(ownership, ownership_fields)
+
     ownership_stacked = stack(ownership, ownership_name_by_field)
-    ownership_vertical = {'data': ownership_stacked, 'fields': ownership_fields}
 
     demolitions_name_by_field = OrderedDict([('demo_contractor', "Contractor Name"),
             ('demo_price', "Price"), # $###.##
@@ -354,8 +354,7 @@ def get_parcels(request):
             # supported something like the tojson filter, we could just use that
             # in the template ({{ parcels|tojson|safe }}) instead.
             'voters': standard_voters,
-            'ownership': standard_ownership,
-            'ownership_vertical': ownership_vertical,
+            'ownership': ownership_stacked,
             'demolitions': demolitions_stacked,
             'vacancy': vacancy_stacked,
             'blight_violations': blight_violations_stacked,
