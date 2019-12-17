@@ -198,6 +198,11 @@ def get_parcels(request):
     ic(search_type)
 
     # Define fields and display-name lookup
+    ownership_config = {'table_name': 'ownership',
+        'name_by_field': OrderedDict([('d3_year', "Year"),
+            ('owner_name', "Owner"),
+            ('owner_address', "Owner Address")])
+        }
     vacancy_config = {'table_name': 'vacancy',
         'name_by_field': OrderedDict([
             #('d3_year', "Year"),
@@ -209,7 +214,6 @@ def get_parcels(request):
 
     if PRODUCTION:
         parcels = query_db(search_type, search_term)
-        ownership = []
         demolitions = []
         blight_violations = []
         building_permits = []
@@ -245,8 +249,8 @@ def get_parcels(request):
             {'d3_year': 2019, 'voter_birth_year': 1968},
             {'d3_year': 2019, 'voter_birth_year': 1990}]
         aggregated_voters = []
-        ownership = [{'year': 2019, 'owner_name': 'Jetson,George', 'owner_address': "019409013 Space Way, Satellite B87ZZ9"},
-                {'year': 2009, 'owner_name': 'Bird,Big', 'owner_address': "123 Sesame St, New York, NY"}]
+        ownership = [{'d3_year': 2019, 'owner_name': 'Jetson,George', 'owner_address': "019409013 Space Way, Satellite B87ZZ9"},
+                {'d3_year': 2009, 'owner_name': 'Bird,Big', 'owner_address': "123 Sesame St, New York, NY"}]
         demolitions = [{'demo_contractor': "Biff & Sully",
             'demo_price': "$123.58",
             'demo_funding_source': "The CvC Foundation",
@@ -293,13 +297,7 @@ def get_parcels(request):
         voter['voter_age_by_years_end'] = current_year - voter['voter_birth_year']
     standard_voters = convert_to_standard_model(voters, ['d3_year', 'voter_age_by_years_end'])
 
-    ownership_name_by_field = OrderedDict([('year', "Year"),
-        ('owner_name', "Owner"),
-        ('owner_address', "Owner Address")])
-    ownership_fields = list(ownership_name_by_field.keys())
-    standard_ownership = convert_to_standard_model(ownership, ownership_fields)
-
-    ownership_stacked = stack(ownership, ownership_name_by_field)
+    ownership_stacked = stack(ownership, ownership_config['name_by_field'])
 
     demolitions_name_by_field = OrderedDict([('demo_contractor', "Contractor Name"),
             ('demo_price', "Price"), # $###.##
