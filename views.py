@@ -208,7 +208,7 @@ def get_parcels(request):
             ("disposition", "Disposition"),
             ("balance_due", "Balance Due")])
         }
-    building_permits_config = {'table_name': "buidling_permits",
+    building_permits_config = {'table_name': "building_permits",
             'name_by_field': OrderedDict([("permit_no", "Permit Number"),
                 ("permit_issued", "Permit Issued"),
                 ("permit_completed", "Permit Completed"),
@@ -250,7 +250,7 @@ def get_parcels(request):
         if len(parcels) > 0:
             d3_id = parcels[0]['d3_id']
             blight_violations = query_blight_violations(blight_violations_config, d3_id)
-            buidling_permits = query_building_permits(building_permits_config, d3_id)
+            building_permits = query_building_permits(building_permits_config, d3_id)
             demolitions = query_demolitions(demolitions_config, d3_id)
             voters = query_voters(d3_id)
             aggregated_voters = aggregate_voters(d3_id)
