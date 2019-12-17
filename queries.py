@@ -82,3 +82,11 @@ def query_voters(d3_id):
         cursor.execute(query)
         rows = dictfetchall(cursor)
     return rows
+
+def query_d3_table(table_config, d3_id):
+    """This is a general querying function which takes all the fields specified in the table_config and
+    selects them from the table named under the 'table_name' key of the table_config, filtering for
+    a d3_id value equal to the second passed argument."""
+    field_list = ', '.join(table_config['name_by_field'].keys())
+    query = f"SELECT {field_list} FROM {table_config['table_name']} WHERE d3_id = {d3_id}" #ORDER BY d3_year"
+    return execute(query)
