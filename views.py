@@ -268,14 +268,14 @@ def get_parcels(request):
         parcels = [
                 {'last_sale_amount': 13031.00,
                 'last_sale_date': "2010-06-17",
-                'vacant_percent': 50, # Check whether this is really stored as a percent or a ratio in the databse.
+                'vacant_percent': 50,
                 'num_vacant': 3,
                 'num_occupied': 3,
                 'block_number': 'ITS-UI-LIKE',
                 'prop_addr': '49 King',
                 'city_name': 'Detroit',
                 'prop_parcelnum': '01002779'}
-                ] # Eventually provide some actual results in here for testing purposes.
+                ]
         voters = [{'d3_year': 2019, 'voter_birth_year': 1944},
             {'d3_year': 2019, 'voter_birth_year': 1947},
             {'d3_year': 2019, 'voter_birth_year': 1947},
@@ -332,15 +332,12 @@ def get_parcels(request):
         voter['voter_age_by_years_end'] = current_year - voter['voter_birth_year']
     standard_voters = convert_to_standard_model(voters, ['d3_year', 'voter_age_by_years_end'])
 
-    ownership_stacked = stack(ownership, ownership_config['name_by_field'])
-
+    blight_violations_stacked = stack(blight_violations, blight_violations_config['name_by_field'])
+    building_permits_stacked = stack(building_permits, building_permits_config['name_by_field'])
     demolitions_stacked = stack(demolitions, demolitions_config['name_by_field'])
-
+    ownership_stacked = stack(ownership, ownership_config['name_by_field'])
     vacancy_stacked = stack(vacancy, vacancy_config['name_by_field'])
 
-    blight_violations_stacked = stack(blight_violations, blight_violations_config['name_by_field'])
-
-    building_permits_stacked = stack(building_permits, building_permits_config['name_by_field'])
 
     property_sales_name_by_field = OrderedDict([("sale_date", "Sale Date"),
         ("sale_price", "Sale Price"),
