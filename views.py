@@ -13,7 +13,7 @@ from collections import OrderedDict
 from .models import UserLoginActivity
 from .tracking_util import save_activity
 from .queries_v0 import query_db as query_db_v0, query_voters as query_voters_v0, aggregate_voters as aggregate_voters_v0
-from .queries import query_db, query_demolitions, query_voters, query_ownership, aggregate_voters, query_d3_table
+from .queries import query_db, query_blight_violations, query_demolitions, query_voters, query_ownership, aggregate_voters, query_d3_table
 from .parameters.local import PRODUCTION
 
 from django.contrib.auth.decorators import login_required
@@ -198,6 +198,16 @@ def get_parcels(request):
     ic(search_type)
 
     # Define fields and display-name lookup
+    blight_violations_config = {'table_name': "blight_violations",
+        'name_by_field': OrderedDict([("ticket_number", "Ticket Number"),
+            ("agency_name", "Agency Name"),
+            ("violator_name", "Violator Name"),
+            ("violator_mailing_address", "Violator Mailing Address"),
+            ("violation_date", "Violation Date"),
+            ("violation_code_and_description", "Violation"), # Combine violation_code, violation_description like this f"{violation_code}: {violation_description}"
+            ("disposition", "Disposition"),
+            ("balance_due", "Balance Due")])
+        }
     demolitions_config = {'table_name': 'demolitions',
         'name_by_field': OrderedDict([('demo_contractor', "Contractor Name"),
             ('demo_price', "Price"), # $###.##
@@ -222,12 +232,12 @@ def get_parcels(request):
 
     if PRODUCTION:
         parcels = query_db(search_type, search_term)
-        blight_violations = []
         building_permits = []
         foreclosures = []
         property_sales = []
         if len(parcels) > 0:
             d3_id = parcels[0]['d3_id']
+            blight_violations = query_blight_violations(blight_violations_config, d3_id)
             demolitions = query_demolitions(demolitions_config, d3_id)
             voters = query_voters(d3_id)
             aggregated_voters = aggregate_voters(d3_id)
@@ -235,6 +245,7 @@ def get_parcels(request):
             ownership = query_ownership(d3_id)
         else:
             aggregated_voters = []
+            blight_violations = []
             demolitions = []
             ownership = []
             vacancy = []
@@ -313,15 +324,7 @@ def get_parcels(request):
 
     vacancy_stacked = stack(vacancy, vacancy_config['name_by_field'])
 
-    blight_violations_name_by_field = OrderedDict([("ticket_number", "Ticket Number"),
-        ("agency_name", "Agency Name"),
-        ("violator_name", "Violator Name"),
-        ("violator_mailing_address", "Violator Mailing Address"),
-        ("violation_date", "Violation Date"),
-        ("violation_code_and_description", "Violation"), # Combine violation_code, violation_description like this f"{violation_code}: {violation_description}"
-        ("disposition", "Disposition"),
-        ("balance_due", "Balance Due")])
-    blight_violations_stacked = stack(blight_violations, blight_violations_name_by_field)
+    blight_violations_stacked = stack(blight_violations, blight_violations_config['name_by_field'])
 
     building_permits_name_by_field = OrderedDict([("permit_no", "Permit Number"),
         ("permit_issued", "Permit Issued"),

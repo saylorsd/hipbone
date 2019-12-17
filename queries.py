@@ -75,6 +75,13 @@ def aggregate_voters(d3_id):
     query = "SELECT d3_year, ROUND(voter_birth_year/10)*10::int AS decade, COUNT(id) AS count FROM voters WHERE d3_id = {} GROUP BY decade, d3_year ORDER BY d3_year, decade".format(d3_id)
     return execute(query)
 
+def query_blight_violations(table_config, d3_id):
+    """Query blight_violations table, using 'where {d3_id} = ANY(d3_id) to
+    address the issue that in this table, the d3_id field is an
+    array of bigints."""
+    query = f"SELECT ticket_number, agency_name, violator_name, CONCAT(mailing_address_street_number, ' ', mailing_address_street_name, ', ', mailing_address_city, ', ', mailing_address_state, ' ', mailing_address_zip_code, ' ', mailing_address_nonusa_code, ' ', mailing_address_country) AS violator_mailing_address, violation_date, CONCAT(violation_code, ': ', violation_description) AS violation_code_and_description, disposition, balance_due::NUMERIC::MONEY FROM {table_config['table_name']} WHERE {d3_id} = ANY(d3_id) ORDER BY violation_date"
+    return execute(query)
+
 def query_demolitions(table_config, d3_id):
     """Query demolitions table, using 'where {d3_id} = ANY(d3_id) to
     address the issue that in this table, the d3_id field is an
