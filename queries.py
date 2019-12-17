@@ -44,32 +44,38 @@ def form_address_query(address, date_str=None):
     query = BASE_QUERY
     #--FUTURE TABLES LEFT JOIN HERE
     query += " WHERE prop_addr = UPPER('{}')".format(address)
-    return append_date_clause(query, date_str)
-
+    return query, append_date_clause(query, date_str)
 
 def form_parcel_query(parcel_number, date_str=None):
     query = BASE_QUERY
     #--FUTURE TABLES LEFT JOIN HERE
     query += " WHERE prop_parcelnum = UPPER('{}')".format(parcel_number)
-    return append_date_clause(query, date_str)
-
-def query_db(search_type, search_term, date_str='9/1/2019'):
-    if search_type == 'address':
-        #sample_query = form_address_query('440 Burroughs', '9/1/2019')
-        query = form_address_query(search_term, date_str)
-    else: # search_type = 'parcel'
-        query = form_parcel_query(search_term, date_str)
-
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        rows = dictfetchall(cursor)
-    return rows
+    return query, append_date_clause(query, date_str)
 
 def execute(query):
     with connection.cursor() as cursor:
         cursor.execute(query)
         rows = dictfetchall(cursor)
     return rows
+
+def query_db_by_date(search_type, search_term, date_str='9/1/2019'):
+    if search_type == 'address':
+        #sample_query = form_address_query('440 Burroughs', '9/1/2019')
+        _, query = form_address_query(search_term, date_str)
+    else: # search_type = 'parcel'
+        _, query = form_parcel_query(search_term, date_str)
+
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = dictfetchall(cursor)
+    return rows
+
+def query_db(search_type, search_term):
+    if search_type == 'address':
+        query, _ = form_address_query(search_term)
+    else: # search_type = 'parcel'
+        query, _ = form_parcel_query(search_term)
+    return execute(query)
 
 def aggregate_voters(d3_id):
     query = "SELECT d3_year, ROUND(voter_birth_year/10)*10::int AS decade, COUNT(id) AS count FROM voters WHERE d3_id = {} GROUP BY decade, d3_year ORDER BY d3_year, decade".format(d3_id)
