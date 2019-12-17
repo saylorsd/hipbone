@@ -105,10 +105,11 @@ def query_voters(d3_id):
         rows = dictfetchall(cursor)
     return rows
 
-def query_d3_table(table_config, d3_id):
+def query_d3_table(table_config, d3_ids):
     """This is a general querying function which takes all the fields specified in the table_config and
     selects them from the table named under the 'table_name' key of the table_config, filtering for
-    a d3_id value equal to the second passed argument."""
+    a d3_id value among those in the passed list."""
     field_list = ', '.join(table_config['name_by_field'].keys())
-    query = f"SELECT {field_list} FROM {table_config['table_name']} WHERE d3_id = {d3_id}" #ORDER BY d3_year"
+    ids_sql_list = ', '.join([str(d3_id) for d3_id in d3_ids])
+    query = f"SELECT {field_list} FROM {table_config['table_name']} WHERE d3_id IN ({ids_sql_list})" #ORDER BY d3_year"
     return execute(query)

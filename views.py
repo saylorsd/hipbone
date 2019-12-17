@@ -159,6 +159,8 @@ class IndexView(View):
                     voters = query_voters(d3_id)
                     aggregated_voters = aggregate_voters(d3_id)
                 else:
+                    # Actually, in this case, we need to get all the d3_id values
+                    # and use them all in subsequent queries.
                     voters = []
                     aggregated_voters = []
 
@@ -249,12 +251,13 @@ def get_parcels(request):
         property_sales = []
         if len(parcels) > 0:
             d3_id = parcels[0]['d3_id']
+            d3_ids = [p['d3_id'] for p in parcels]
             blight_violations = query_blight_violations(blight_violations_config, d3_id)
             building_permits = query_building_permits(building_permits_config, d3_id)
             demolitions = query_demolitions(demolitions_config, d3_id)
             voters = query_voters(d3_id)
             aggregated_voters = aggregate_voters(d3_id)
-            vacancy = query_d3_table(vacancy_config, d3_id)
+            vacancy = query_d3_table(vacancy_config, d3_ids)
             ownership = query_ownership(d3_id)
         else:
             aggregated_voters = []
