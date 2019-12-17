@@ -13,7 +13,7 @@ from collections import OrderedDict
 from .models import UserLoginActivity
 from .tracking_util import save_activity
 from .queries_v0 import query_db as query_db_v0, query_voters as query_voters_v0, aggregate_voters as aggregate_voters_v0
-from .queries import query_db, query_voters, aggregate_voters
+from .queries import query_db, query_voters, aggregate_voters, query_d3_table
 from .parameters.local import PRODUCTION
 
 from django.contrib.auth.decorators import login_required
@@ -197,11 +197,20 @@ def get_parcels(request):
         search_type = 'address'
     ic(search_type)
 
+    # Define fields and display-name lookup
+    vacancy_config = {'table_name': 'vacancy',
+        'name_by_field': OrderedDict([
+            #('d3_year', "Year"),
+            ('quarter', "Quarter"),
+            ('vacant_percent', "Percent Vacant"), # ##.#%
+            ('num_vacant', "Number Vacant"),
+            ('num_occupied', "Number Occupied")])
+        }
+
     if PRODUCTION:
         parcels = query_db(search_type, search_term)
         ownership = []
         demolitions = []
-        vacancy = []
         blight_violations = []
         building_permits = []
         foreclosures = []
@@ -210,9 +219,11 @@ def get_parcels(request):
             d3_id = parcels[0]['d3_id']
             voters = query_voters(d3_id)
             aggregated_voters = aggregate_voters(d3_id)
+            vacancy = query_d3_table(vacancy_config, d3_id)
         else:
-            voters = []
             aggregated_voters = []
+            vacancy = []
+            voters = []
     else:
         parcels = [
                 {'last_sale_amount': 13031.00,
@@ -297,12 +308,7 @@ def get_parcels(request):
             ('demo_was_commercial', "Commerical Demolition")]) # Yes/No
     demolitions_stacked = stack(demolitions, demolitions_name_by_field)
 
-    vacancy_name_by_field = OrderedDict([('d3_year', "Year"),
-        ('quarter', "Quarter"),
-        ('vacant_percent', "Percent Vacant"), # ##.#%
-        ('num_vacant', "Number Vacant"),
-        ('num_occupied', "Number Occupied")])
-    vacancy_stacked = stack(vacancy, vacancy_name_by_field)
+    vacancy_stacked = stack(vacancy, vacancy_config['name_by_field'])
 
     blight_violations_name_by_field = OrderedDict([("ticket_number", "Ticket Number"),
         ("agency_name", "Agency Name"),
