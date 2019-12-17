@@ -82,6 +82,10 @@ def query_blight_violations(table_config, d3_id):
     query = f"SELECT ticket_number, agency_name, violator_name, CONCAT(mailing_address_street_number, ' ', mailing_address_street_name, ', ', mailing_address_city, ', ', mailing_address_state, ' ', mailing_address_zip_code, ' ', mailing_address_nonusa_code, ' ', mailing_address_country) AS violator_mailing_address, violation_date, CONCAT(violation_code, ': ', violation_description) AS violation_code_and_description, disposition, balance_due::NUMERIC::MONEY FROM {table_config['table_name']} WHERE {d3_id} = ANY(d3_id) ORDER BY violation_date"
     return execute(query)
 
+def query_building_permits(table_config, d3_id):
+    query = f"SELECT permit_no, permit_issued, permit_completed, permit_status, estimated_cost::NUMERIC::MONEY, bld_permit_type, bld_permit_desc, bld_type_useFROM {table_config['table_name']} WHERE {d3_id} = ANY(d3_id) ORDER BY violation_date"
+    return execute(query)
+
 def query_demolitions(table_config, d3_id):
     """Query demolitions table, using 'where {d3_id} = ANY(d3_id) to
     address the issue that in this table, the d3_id field is an

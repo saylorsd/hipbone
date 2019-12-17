@@ -13,7 +13,7 @@ from collections import OrderedDict
 from .models import UserLoginActivity
 from .tracking_util import save_activity
 from .queries_v0 import query_db as query_db_v0, query_voters as query_voters_v0, aggregate_voters as aggregate_voters_v0
-from .queries import query_db, query_blight_violations, query_demolitions, query_voters, query_ownership, aggregate_voters, query_d3_table
+from .queries import query_db, query_blight_violations, query_building_permits, query_demolitions, query_voters, query_ownership, aggregate_voters, query_d3_table
 from .parameters.local import PRODUCTION
 
 from django.contrib.auth.decorators import login_required
@@ -208,6 +208,19 @@ def get_parcels(request):
             ("disposition", "Disposition"),
             ("balance_due", "Balance Due")])
         }
+    building_permits_config = {'table_name': "buidling_permits",
+            'name_by_field': OrderedDict([("permit_no", "Permit Number"),
+                ("permit_issued", "Permit Issued"),
+                ("permit_completed", "Permit Completed"),
+                ("permit_status", "Permit Status"),
+                ("estimated_cost", "Estimated Cost"),
+                ("bld_permit_type", "Permit Type"),
+                ("bld_permit_desc", "Permit Description"),
+                ("bld_type_use", "Building Use Type"),
+                ("owner_name", "Owner"), # owner_first_name, owner_last_name ==> Display as (FIRST if exists) (LAST)
+                ("owner_address", "Owner Address"), # [ ] Some comments on some of these building permit fields still need to be copied over from the specs.
+                ("contractor_name", "Contractor Name")])
+        }
     demolitions_config = {'table_name': 'demolitions',
         'name_by_field': OrderedDict([('demo_contractor', "Contractor Name"),
             ('demo_price', "Price"), # $###.##
@@ -232,12 +245,12 @@ def get_parcels(request):
 
     if PRODUCTION:
         parcels = query_db(search_type, search_term)
-        building_permits = []
         foreclosures = []
         property_sales = []
         if len(parcels) > 0:
             d3_id = parcels[0]['d3_id']
             blight_violations = query_blight_violations(blight_violations_config, d3_id)
+            buidling_permits = query_building_permits(building_permits_config, d3_id)
             demolitions = query_demolitions(demolitions_config, d3_id)
             voters = query_voters(d3_id)
             aggregated_voters = aggregate_voters(d3_id)
@@ -246,6 +259,7 @@ def get_parcels(request):
         else:
             aggregated_voters = []
             blight_violations = []
+            building_permits = []
             demolitions = []
             ownership = []
             vacancy = []
@@ -326,18 +340,7 @@ def get_parcels(request):
 
     blight_violations_stacked = stack(blight_violations, blight_violations_config['name_by_field'])
 
-    building_permits_name_by_field = OrderedDict([("permit_no", "Permit Number"),
-        ("permit_issued", "Permit Issued"),
-        ("permit_completed", "Permit Completed"),
-        ("permit_status", "Permit Status"),
-        ("estimated_cost", "Estimated Cost"),
-        ("bld_permit_type", "Permit Type"),
-        ("bld_permit_desc", "Permit Description"),
-        ("bld_type_use", "Building Use Type"),
-        ("owner_name", "Owner"), # owner_first_name, owner_last_name ==> Display as (FIRST if exists) (LAST)
-        ("owner_address", "Owner Address"), # [ ] Some comments on some of these building permit fields still need to be copied over from the specs.
-        ("contractor_name", "Contractor Name")])
-    building_permits_stacked = stack(building_permits, building_permits_name_by_field)
+    building_permits_stacked = stack(building_permits, building_permits_config['name_by_field'])
 
     property_sales_name_by_field = OrderedDict([("sale_date", "Sale Date"),
         ("sale_price", "Sale Price"),
