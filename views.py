@@ -13,7 +13,7 @@ from collections import OrderedDict
 from .models import UserLoginActivity
 from .tracking_util import save_activity
 from .queries_v0 import query_db as query_db_v0, query_voters as query_voters_v0, aggregate_voters as aggregate_voters_v0
-from .queries import query_db, query_voters, query_ownership, aggregate_voters, query_d3_table
+from .queries import query_db, query_demolitions, query_voters, query_ownership, aggregate_voters, query_d3_table
 from .parameters.local import PRODUCTION
 
 from django.contrib.auth.decorators import login_required
@@ -198,6 +198,14 @@ def get_parcels(request):
     ic(search_type)
 
     # Define fields and display-name lookup
+    demolitions_config = {'table_name': 'demolitions',
+        'name_by_field': OrderedDict([('demo_contractor', "Contractor Name"),
+            ('demo_price', "Price"), # $###.##
+            ('demo_funding_source', "Funding Source"),
+            ('demo_date', "Date"), # MM/DD/YYYY
+            ('demo_was_commercial', "Commerical Demolition")]) # Yes/No
+        }
+
     ownership_config = {'table_name': 'ownership',
         'name_by_field': OrderedDict([('d3_year', "Year"),
             ('owner_name', "Owner"),
@@ -214,19 +222,20 @@ def get_parcels(request):
 
     if PRODUCTION:
         parcels = query_db(search_type, search_term)
-        demolitions = []
         blight_violations = []
         building_permits = []
         foreclosures = []
         property_sales = []
         if len(parcels) > 0:
             d3_id = parcels[0]['d3_id']
+            demolitions = query_demolitions(demolitions_config, d3_id)
             voters = query_voters(d3_id)
             aggregated_voters = aggregate_voters(d3_id)
             vacancy = query_d3_table(vacancy_config, d3_id)
             ownership = query_ownership(d3_id)
         else:
             aggregated_voters = []
+            demolitions = []
             ownership = []
             vacancy = []
             voters = []
@@ -283,7 +292,6 @@ def get_parcels(request):
             "owner_address": "123B Sesame Street, New York, NY",
             "contractor_name": "Biff"} ]
 
-
         foreclosures= [2009, 2012, 2019]
         property_sales = [{"sale_date": "03/04/2010",
             "sale_price": "$101,010.10",
@@ -301,12 +309,7 @@ def get_parcels(request):
 
     ownership_stacked = stack(ownership, ownership_config['name_by_field'])
 
-    demolitions_name_by_field = OrderedDict([('demo_contractor', "Contractor Name"),
-            ('demo_price', "Price"), # $###.##
-            ('demo_funding_source', "Funding Source"),
-            ('demo_date', "Date"), # MM/DD/YYYY
-            ('demo_was_commercial', "Commerical Demolition")]) # Yes/No
-    demolitions_stacked = stack(demolitions, demolitions_name_by_field)
+    demolitions_stacked = stack(demolitions, demolitions_config['name_by_field'])
 
     vacancy_stacked = stack(vacancy, vacancy_config['name_by_field'])
 
