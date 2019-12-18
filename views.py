@@ -353,7 +353,7 @@ def get_parcels(request):
     vacancy_stacked = stack(vacancy, vacancy_config['name_by_field'])
 
 
-    property_sales_stacked = stack(property_sales, property_sales['name_by_field'])
+    property_sales_stacked = stack(property_sales, property_sales_config['name_by_field'])
 
     foreclosures_horizontal = horizontalize_over_years(foreclosures, current_year) # A possible
     # problem with this approach is that the JavaScript may not obtain the number of
