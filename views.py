@@ -261,13 +261,17 @@ def get_parcels(request):
         if len(parcels) > 0:
             d3_id = parcels[0]['d3_id']
             d3_ids = [p['d3_id'] for p in parcels]
-            blight_violations = query_blight_violations(blight_violations_config, d3_id)
-            building_permits = query_building_permits(building_permits_config, d3_id)
-            demolitions = query_demolitions(demolitions_config, d3_id)
+
+            # Tables with records that contain single d3_id values
+            building_permits = query_building_permits(building_permits_config, d3_ids)
             voters = query_voters(d3_ids)
             vacancy = query_d3_table(vacancy_config, d3_ids)
             ownership = query_ownership(d3_ids)
             property_sales = query_property_sales(d3_ids)
+
+            # Tables with records that contain arrays of d3_id values
+            blight_violations = query_blight_violations(blight_violations_config, d3_id)
+            demolitions = query_demolitions(demolitions_config, d3_id)
         else:
             blight_violations = []
             building_permits = []
