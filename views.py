@@ -231,6 +231,10 @@ def get_parcels(request):
             ('demo_was_commercial', "Commerical Demolition")]) # Yes/No
         }
 
+    foreclosures_config = {'table_name': 'tax_foreclosures',
+        'name_by_field': OrderedDict([ ('year_foreclosed', "Year Foreclosed") ])
+        }
+
     ownership_config = {'table_name': 'ownership',
         'name_by_field': OrderedDict([('d3_year', "Year"),
             ('owner_name', "Owner"),
@@ -268,13 +272,14 @@ def get_parcels(request):
 
     if PRODUCTION:
         parcels = query_db(search_type, search_term)
-        foreclosures = []
         if len(parcels) > 0:
             d3_id = parcels[0]['d3_id']
             d3_ids = [p['d3_id'] for p in parcels]
 
             # Tables with records that contain single d3_id values
             building_permits = query_building_permits(building_permits_config, d3_ids)
+            foreclosures = query_d3_table(foreclosures_config, d3_ids)
+            foreclosures = [f['year_foreclosed'] for f in foreclosures]
             voters = query_voters(d3_ids)
             vacancy = query_d3_table(vacancy_config, d3_ids)
             ownership = query_ownership(d3_ids)
@@ -288,6 +293,7 @@ def get_parcels(request):
             blight_violations = []
             building_permits = []
             demolitions = []
+            foreclosures = []
             ownership = []
             parcel_tax_and_values = []
             property_sales = []
