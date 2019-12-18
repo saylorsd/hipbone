@@ -97,19 +97,6 @@ No results.
             <div class='row metatable'>
                 <div class='fcolumn'>
                     <div class='row' style="margin-bottom:1em;">
-                        <table class="format-width" cellpadding="20px" style="background-color:#ffffff; color:#000000;">
-                        <thead align="left" style="background-color:#f2ba5c; color:#000000"><th colspan="3"><span class="bold">QUALIFIED VOTERS BY DECADE OF BIRTH</span></th></thead>
-                        <thead style="background-color:#f2ba5c; color:#000000"><th><span class="bold">As of</span></th><th><span class="bold">Voter birth decade</span></th><th><span class="bold">Count</span></th></thead>
-                        <tbody>
-                        {% if aggregated_voters|length == 0 %}
-                            <tr><td colspan="3">No results</td></tr>
-                        {% else %}
-                            {% for bin in aggregated_voters %}
-                                <tr><td>{{ bin.d3_year }}</td><td>{{ bin.decade|floatformat }}s</td><td>{{ bin.count }}</td></tr>
-                            {% endfor %}
-                        {% endif %}
-                        </tbody>
-                        </table>
                     </div>
                 </div>
                 <div class='fcolumn'>

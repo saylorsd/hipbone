@@ -265,12 +265,10 @@ def get_parcels(request):
             building_permits = query_building_permits(building_permits_config, d3_id)
             demolitions = query_demolitions(demolitions_config, d3_id)
             voters = query_voters(d3_ids)
-            aggregated_voters = aggregate_voters(d3_id)
             vacancy = query_d3_table(vacancy_config, d3_ids)
             ownership = query_ownership(d3_ids)
             property_sales = query_property_sales(d3_ids)
         else:
-            aggregated_voters = []
             blight_violations = []
             building_permits = []
             demolitions = []
@@ -298,7 +296,6 @@ def get_parcels(request):
             {'d3_year': 2019, 'voter_birth_year': 1968},
             {'d3_year': 2019, 'voter_birth_year': 1968},
             {'d3_year': 2019, 'voter_birth_year': 1990}]
-        aggregated_voters = []
         ownership = [{'d3_year': 2019, 'owner_name': 'Jetson,George', 'owner_address': "019409013 Space Way, Satellite B87ZZ9"},
                 {'d3_year': 2009, 'owner_name': 'Bird,Big', 'owner_address': "123 Sesame St, New York, NY"}]
         demolitions = [{'demo_contractor': "Biff & Sully",
@@ -376,7 +373,6 @@ def get_parcels(request):
             'building_permits': building_permits_stacked,
             'tax_foreclosures': foreclosures_horizontal,
             'property_sales': property_sales_stacked,
-            'aggregated_voters': aggregated_voters,
             'error_message': error_message,
             'output_format': 'html'
         }
