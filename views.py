@@ -13,7 +13,7 @@ from collections import OrderedDict
 from .models import UserLoginActivity
 from .tracking_util import save_activity
 from .queries_v0 import query_db as query_db_v0, query_voters as query_voters_v0, aggregate_voters as aggregate_voters_v0
-from .queries import query_db_by_date, query_db, query_blight_violations, query_building_permits, query_demolitions, query_voters, query_ownership, query_property_sales, aggregate_voters, query_d3_table
+from .queries import query_db_by_date, query_db, query_blight_violations, query_building_permits, query_demolitions, query_voters, query_ownership, query_parcel_tax_and_values, query_property_sales, aggregate_voters, query_d3_table
 from .parameters.local import PRODUCTION
 
 from django.contrib.auth.decorators import login_required
@@ -278,6 +278,7 @@ def get_parcels(request):
             voters = query_voters(d3_ids)
             vacancy = query_d3_table(vacancy_config, d3_ids)
             ownership = query_ownership(d3_ids)
+            parcel_tax_and_values = query_parcel_tax_and_values(d3_ids)
             property_sales = query_property_sales(d3_ids)
 
             # Tables with records that contain arrays of d3_id values
@@ -288,6 +289,7 @@ def get_parcels(request):
             building_permits = []
             demolitions = []
             ownership = []
+            parcel_tax_and_values = []
             property_sales = []
             vacancy = []
             voters = []
