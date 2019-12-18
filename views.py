@@ -237,6 +237,17 @@ def get_parcels(request):
             ('owner_address', "Owner Address")])
         }
 
+    parcel_tax_and_values_config = {'table_name': 'parcel_tax_and_values',
+        'name_by_field': OrderedDict([
+            #('d3_year', "Year"),
+            ('improved_value', "Improved Value"), # $###.##
+            ('land_value', "Land Value"),
+            ('pre', "PRE"),
+            ('assessment_value', "Assessment Value"),
+            ('taxable_value', "Taxable Value"),
+            ('taxable_status', "Taxable Status")])
+        }
+
     property_sales_config = {'table_name': 'property_sales',
         'name_by_field': OrderedDict([("sale_date", "Sale Date"),
             ("sale_price", "Sale Price"),
@@ -333,6 +344,15 @@ def get_parcels(request):
             "contractor_name": "Biff"} ]
 
         foreclosures= [2009, 2012, 2019]
+        parcel_tax_and_values = [{
+            #'d3_year': 2018,
+            'improved_value': '$10,000.00',
+            'land_value': '$3,000,000.00',
+            'pre': 'LOBOT',
+            'assessment_value': '$88,888.99',
+            'taxable_value': '$89,000.00',
+            'taxable_status': 'So Taxable'}]
+
         property_sales = [{"sale_date": "03/04/2010",
             "sale_price": "$101,010.10",
             "grantor": "Scrooge McDuck",
@@ -353,7 +373,7 @@ def get_parcels(request):
     ownership_stacked = stack(ownership, ownership_config['name_by_field'])
     vacancy_stacked = stack(vacancy, vacancy_config['name_by_field'])
 
-
+    parcel_tax_and_values_stacked = stack(parcel_tax_and_values, parcel_tax_and_values_config['name_by_field'])
     property_sales_stacked = stack(property_sales, property_sales_config['name_by_field'])
 
     foreclosures_horizontal = horizontalize_over_years(foreclosures, current_year) # A possible
@@ -376,6 +396,7 @@ def get_parcels(request):
             'blight_violations': blight_violations_stacked,
             'building_permits': building_permits_stacked,
             'tax_foreclosures': foreclosures_horizontal,
+            'parcel_tax_and_values': parcel_tax_and_values_stacked,
             'property_sales': property_sales_stacked,
             'error_message': error_message,
             'output_format': 'html'
