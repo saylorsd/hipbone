@@ -13,7 +13,7 @@ from collections import OrderedDict
 from .models import UserLoginActivity
 from .tracking_util import save_activity
 from .queries_v0 import query_db as query_db_v0, query_voters as query_voters_v0, aggregate_voters as aggregate_voters_v0
-from .queries import query_db_by_date, query_db, query_blight_violations, query_building_permits, query_demolitions, query_voters, query_ownership, aggregate_voters, query_d3_table
+from .queries import query_db_by_date, query_db, query_blight_violations, query_building_permits, query_demolitions, query_voters, query_ownership, query_property_sales, aggregate_voters, query_d3_table
 from .parameters.local import PRODUCTION
 
 from django.contrib.auth.decorators import login_required
@@ -236,6 +236,17 @@ def get_parcels(request):
             ('owner_name', "Owner"),
             ('owner_address', "Owner Address")])
         }
+
+    property_sales_config = {'table_name': 'property_sales',
+        'name_by_field': OrderedDict([("sale_date", "Sale Date"),
+            ("sale_price", "Sale Price"),
+            ("grantor", "Grantor"),
+            ("grantee", "Grantee"),
+            ("sale_terms", "Sale Terms"),
+            ("verified_by", "Verified By"),
+            ("sale_instrument", "Sale Instrument")])
+        }
+
     vacancy_config = {'table_name': 'vacancy',
         'name_by_field': OrderedDict([
             #('d3_year', "Year"),
@@ -248,13 +259,14 @@ def get_parcels(request):
     if PRODUCTION:
         parcels = query_db(search_type, search_term)
         foreclosures = []
-        property_sales = []
         if len(parcels) > 0:
             d3_id = parcels[0]['d3_id']
             d3_ids = [p['d3_id'] for p in parcels]
             blight_violations = query_blight_violations(blight_violations_config, d3_id)
             building_permits = query_building_permits(building_permits_config, d3_id)
             demolitions = query_demolitions(demolitions_config, d3_id)
+
+            property_sales = query_property_sales(d3_ids)
             voters = query_voters(d3_ids)
             aggregated_voters = aggregate_voters(d3_id)
             vacancy = query_d3_table(vacancy_config, d3_ids)
@@ -265,6 +277,7 @@ def get_parcels(request):
             building_permits = []
             demolitions = []
             ownership = []
+            property_sales = []
             vacancy = []
             voters = []
     else:
@@ -341,15 +354,7 @@ def get_parcels(request):
     ownership_stacked = stack(ownership, ownership_config['name_by_field'])
     vacancy_stacked = stack(vacancy, vacancy_config['name_by_field'])
 
-
-    property_sales_name_by_field = OrderedDict([("sale_date", "Sale Date"),
-        ("sale_price", "Sale Price"),
-        ("grantor", "Grantor"),
-        ("grantee", "Grantee"),
-        ("sale_terms", "Sale Terms"),
-        ("verified_by", "Verified By"),
-        ("sale_instrument", "Sale Instrument")])
-    property_sales_stacked = stack(property_sales, property_sales_name_by_field)
+    property_sales_stacked = stack(property_sales, property_sales_config['name_by_field'])
 
     foreclosures_horizontal = horizontalize_over_years(foreclosures, current_year) # A possible
     # problem with this approach is that the JavaScript may not obtain the number of

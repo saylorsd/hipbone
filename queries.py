@@ -104,6 +104,11 @@ def query_ownership(d3_ids):
     query = f"SELECT d3_year, CONCAT_WS('; ', owner_name, owner_name2) AS owner_name, CONCAT(owner_street_address, ', ', owner_city, ', ', owner_state, ' ', owner_zip_code, ' ', owner_country) AS owner_address FROM ownership WHERE d3_id IN ({ids_sql_list}) ORDER BY d3_year DESC"
     return execute(query)
 
+def query_property_sales(d3_ids):
+    ids_sql_list = ', '.join([str(d3_id) for d3_id in d3_ids])
+    query = f"SELECT to_char(sale_date, 'MM/DD/YYYY') as sale_date, sale_price::NUMERIC::MONEY, grantor, grantee, sale_terms, verified_by, sale_instrument FROM property_sales WHERE d3_id IN ({ids_sql_list}) ORDER BY sale_date DESC"
+    return execute(query)
+
 def query_voters(d3_ids):
     ids_sql_list = ', '.join([str(d3_id) for d3_id in d3_ids])
     query = f"SELECT d3_year, voter_birth_year FROM voters WHERE d3_id IN ({ids_sql_list}) ORDER BY d3_year, voter_birth_year"
