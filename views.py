@@ -13,7 +13,7 @@ from collections import OrderedDict
 from .models import UserLoginActivity
 from .tracking_util import save_activity
 from .queries_v0 import query_db as query_db_v0, query_voters as query_voters_v0, aggregate_voters as aggregate_voters_v0
-from .queries import query_db_by_date, query_db, query_blight_violations, query_building_permits, query_demolitions, query_voters, query_ownership, query_property_sales, aggregate_voters, query_d3_table
+from .queries import query_db_by_date, query_db, query_blight_violations, query_building_permits, query_demolitions, query_voters, query_ownership, query_parcel_tax_and_values, query_property_sales, aggregate_voters, query_d3_table
 from .parameters.local import PRODUCTION
 
 from django.contrib.auth.decorators import login_required
@@ -231,10 +231,25 @@ def get_parcels(request):
             ('demo_was_commercial', "Commerical Demolition")]) # Yes/No
         }
 
+    foreclosures_config = {'table_name': 'tax_foreclosures',
+        'name_by_field': OrderedDict([ ('year_foreclosed', "Year Foreclosed") ])
+        }
+
     ownership_config = {'table_name': 'ownership',
         'name_by_field': OrderedDict([('d3_year', "Year"),
             ('owner_name', "Owner"),
             ('owner_address', "Owner Address")])
+        }
+
+    parcel_tax_and_values_config = {'table_name': 'parcel_tax_and_values',
+        'name_by_field': OrderedDict([
+            #('d3_year', "Year"),
+            ('improved_value', "Improved Value"), # $###.##
+            ('land_value', "Land Value"),
+            ('pre', "PRE"),
+            ('assessment_value', "Assessment Value"),
+            ('taxable_value', "Taxable Value"),
+            ('taxable_status', "Taxable Status")])
         }
 
     property_sales_config = {'table_name': 'property_sales',
@@ -258,25 +273,30 @@ def get_parcels(request):
 
     if PRODUCTION:
         parcels = query_db(search_type, search_term)
-        foreclosures = []
         if len(parcels) > 0:
             d3_id = parcels[0]['d3_id']
             d3_ids = [p['d3_id'] for p in parcels]
-            blight_violations = query_blight_violations(blight_violations_config, d3_id)
-            building_permits = query_building_permits(building_permits_config, d3_id)
-            demolitions = query_demolitions(demolitions_config, d3_id)
 
-            property_sales = query_property_sales(d3_ids)
+            # Tables with records that contain single d3_id values
+            building_permits = query_building_permits(building_permits_config, d3_ids)
+            foreclosures = query_d3_table(foreclosures_config, d3_ids)
+            foreclosures = [f['year_foreclosed'] for f in foreclosures]
             voters = query_voters(d3_ids)
-            aggregated_voters = aggregate_voters(d3_id)
             vacancy = query_d3_table(vacancy_config, d3_ids)
             ownership = query_ownership(d3_ids)
+            parcel_tax_and_values = query_parcel_tax_and_values(d3_ids)
+            property_sales = query_property_sales(d3_ids)
+
+            # Tables with records that contain arrays of d3_id values
+            blight_violations = query_blight_violations(blight_violations_config, d3_id)
+            demolitions = query_demolitions(demolitions_config, d3_id)
         else:
-            aggregated_voters = []
             blight_violations = []
             building_permits = []
             demolitions = []
+            foreclosures = []
             ownership = []
+            parcel_tax_and_values = []
             property_sales = []
             vacancy = []
             voters = []
@@ -300,7 +320,6 @@ def get_parcels(request):
             {'d3_year': 2019, 'voter_birth_year': 1968},
             {'d3_year': 2019, 'voter_birth_year': 1968},
             {'d3_year': 2019, 'voter_birth_year': 1990}]
-        aggregated_voters = []
         ownership = [{'d3_year': 2019, 'owner_name': 'Jetson,George', 'owner_address': "019409013 Space Way, Satellite B87ZZ9"},
                 {'d3_year': 2009, 'owner_name': 'Bird,Big', 'owner_address': "123 Sesame St, New York, NY"}]
         demolitions = [{'demo_contractor': "Biff & Sully",
@@ -334,6 +353,15 @@ def get_parcels(request):
             "contractor_name": "Biff"} ]
 
         foreclosures= [2009, 2012, 2019]
+        parcel_tax_and_values = [{
+            #'d3_year': 2018,
+            'improved_value': '$10,000.00',
+            'land_value': '$3,000,000.00',
+            'pre': 'LOBOT',
+            'assessment_value': '$88,888.99',
+            'taxable_value': '$89,000.00',
+            'taxable_status': 'So Taxable'}]
+
         property_sales = [{"sale_date": "03/04/2010",
             "sale_price": "$101,010.10",
             "grantor": "Scrooge McDuck",
@@ -354,6 +382,7 @@ def get_parcels(request):
     ownership_stacked = stack(ownership, ownership_config['name_by_field'])
     vacancy_stacked = stack(vacancy, vacancy_config['name_by_field'])
 
+    parcel_tax_and_values_stacked = stack(parcel_tax_and_values, parcel_tax_and_values_config['name_by_field'])
     property_sales_stacked = stack(property_sales, property_sales_config['name_by_field'])
 
     foreclosures_horizontal = horizontalize_over_years(foreclosures, current_year) # A possible
@@ -376,8 +405,8 @@ def get_parcels(request):
             'blight_violations': blight_violations_stacked,
             'building_permits': building_permits_stacked,
             'tax_foreclosures': foreclosures_horizontal,
+            'parcel_tax_and_values': parcel_tax_and_values_stacked,
             'property_sales': property_sales_stacked,
-            'aggregated_voters': aggregated_voters,
             'error_message': error_message,
             'output_format': 'html'
         }

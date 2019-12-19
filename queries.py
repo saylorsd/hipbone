@@ -88,8 +88,9 @@ def query_blight_violations(table_config, d3_id):
     query = f"SELECT ticket_number, agency_name, violator_name, CONCAT(mailing_address_street_number, ' ', mailing_address_street_name, ', ', mailing_address_city, ', ', mailing_address_state, ' ', mailing_address_zip_code, ' ', mailing_address_nonusa_code, ' ', mailing_address_country) AS violator_mailing_address, to_char(violation_date, 'MM/DD/YYYY') as violation_date, CONCAT(violation_code, ': ', violation_description) AS violation_code_and_description, disposition, balance_due::NUMERIC::MONEY FROM {table_config['table_name']} WHERE {d3_id} = ANY(d3_id) ORDER BY violation_date"
     return execute(query)
 
-def query_building_permits(table_config, d3_id):
-    query = f"SELECT permit_no, to_char(permit_issued, 'MM/DD/YYYY') AS permit_issued, to_char(permit_completed, 'MM/DD/YYYY') AS permit_completed, permit_status, estimated_cost::NUMERIC::MONEY, bld_permit_type, bld_permit_desc, bld_type_use, CONCAT_WS(' ', owner_first_name, owner_last_name) AS owner_name, CONCAT(CONCAT_WS(' ', owner_address1, owner_address2), ', ', owner_city, ', ', owner_state, ' ', owner_zip) as owner_address, CONCAT_WS(' ', contractor_first_name, contractor_last_name) AS contractor_name FROM {table_config['table_name']} WHERE {d3_id} = d3_id ORDER BY permit_issued"
+def query_building_permits(table_config, d3_ids):
+    ids_sql_list = ', '.join([str(d3_id) for d3_id in d3_ids])
+    query = f"SELECT permit_no, permit_issued, permit_completed, permit_status, estimated_cost::NUMERIC::MONEY, bld_permit_type, bld_permit_desc, bld_type_use, CONCAT_WS(' ', owner_first_name, owner_last_name) AS owner_name, CONCAT(CONCAT_WS(' ', owner_address1, owner_address2), ', ', owner_city, ', ', owner_state, ' ', owner_zip) as owner_address, CONCAT_WS(' ', contractor_first_name, contractor_last_name) AS contractor_name FROM {table_config['table_name']} WHERE d3_id IN ({ids_sql_list}) ORDER BY permit_issued"
     return execute(query)
 
 def query_demolitions(table_config, d3_id):
@@ -107,6 +108,11 @@ def query_ownership(d3_ids):
 def query_property_sales(d3_ids):
     ids_sql_list = ', '.join([str(d3_id) for d3_id in d3_ids])
     query = f"SELECT to_char(sale_date, 'MM/DD/YYYY') as sale_date, sale_price::NUMERIC::MONEY, grantor, grantee, sale_terms, verified_by, sale_instrument FROM property_sales WHERE d3_id IN ({ids_sql_list}) ORDER BY sale_date DESC"
+    return execute(query)
+
+def query_parcel_tax_and_values(d3_ids):
+    ids_sql_list = ', '.join([str(d3_id) for d3_id in d3_ids])
+    query = f"SELECT d3_year, improved_value::NUMERIC::MONEY, land_value::NUMERIC::MONEY, pre, assessment_value::NUMERIC::MONEY, taxable_value::NUMERIC::MONEY, taxable_status FROM parcel_tax_and_values WHERE d3_id IN ({ids_sql_list}) ORDER BY d3_year DESC"
     return execute(query)
 
 def query_voters(d3_ids):
