@@ -89,7 +89,7 @@ def query_blight_violations(table_config, d3_id):
     return execute(query)
 
 def query_building_permits(table_config, d3_id):
-    query = f"SELECT permit_no, permit_issued, permit_completed, permit_status, estimated_cost::NUMERIC::MONEY, bld_permit_type, bld_permit_desc, bld_type_use, CONCAT_WS(' ', owner_first_name, owner_last_name) AS owner_name, CONCAT(CONCAT_WS(' ', owner_address1, owner_address2), ', ', owner_city, ', ', owner_state, ' ', owner_zip) as owner_address, CONCAT_WS(' ', contractor_first_name, contractor_last_name) AS contractor_name FROM {table_config['table_name']} WHERE {d3_id} = d3_id ORDER BY permit_issued"
+    query = f"SELECT permit_no, to_char(permit_issued, 'MM/DD/YYYY') AS permit_issued, to_char(permit_completed, 'MM/DD/YYYY') AS permit_completed, permit_status, estimated_cost::NUMERIC::MONEY, bld_permit_type, bld_permit_desc, bld_type_use, CONCAT_WS(' ', owner_first_name, owner_last_name) AS owner_name, CONCAT(CONCAT_WS(' ', owner_address1, owner_address2), ', ', owner_city, ', ', owner_state, ' ', owner_zip) as owner_address, CONCAT_WS(' ', contractor_first_name, contractor_last_name) AS contractor_name FROM {table_config['table_name']} WHERE {d3_id} = d3_id ORDER BY permit_issued"
     return execute(query)
 
 def query_demolitions(table_config, d3_id):
