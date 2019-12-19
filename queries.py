@@ -96,7 +96,7 @@ def query_demolitions(table_config, d3_id):
     """Query demolitions table, using 'where {d3_id} = ANY(d3_id) to
     address the issue that in this table, the d3_id field is an
     array of bigints."""
-    query = f"SELECT demo_contractor, demo_price::NUMERIC::MONEY, demo_funding_source, demo_timestamp AS demo_date, (CASE WHEN was_commercial IS NOT NULL THEN 'Yes' ELSE 'No' END) AS demo_was_commercial FROM {table_config['table_name']} WHERE {d3_id} = ANY(d3_id) ORDER BY demo_date"
+    query = f"SELECT demo_contractor, demo_price::NUMERIC::MONEY, demo_funding_source, to_char(demo_timestamp, 'MM/DD/YYYY') AS demo_date, (CASE WHEN was_commercial IS NOT NULL THEN 'Yes' ELSE 'No' END) AS demo_was_commercial FROM {table_config['table_name']} WHERE {d3_id} = ANY(d3_id) ORDER BY demo_date"
     return execute(query)
 
 def query_ownership(d3_ids):
