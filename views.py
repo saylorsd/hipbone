@@ -67,14 +67,14 @@ def stack(table, name_by_field):
 def horizontalize_over_years(years, current_year):
     check_mark = "&#10003;"
     rows = []
-    years_per_row = 16
+    years_per_row = 12
     first_year = 2009
     while first_year <= current_year:
         last_year = min(current_year, first_year + years_per_row - 1)
         row1 = {}
         row2 = {}
         for k,year in enumerate(range(first_year, last_year + 1)):
-            row1[k] = str(year)[-2:]
+            row1[k] = str(year) #str(year)[-2:] # Truncate year to last two digits.
             row2[k] = check_mark if year in years else "&nbsp;" # A non-breaking space is used
             # here to avoid the table row height collapsing.
         rows += [row1, row2]
@@ -303,11 +303,7 @@ def get_parcels(request):
             voters = []
     else:
         parcels = [
-                {'last_sale_amount': 13031.00,
-                'last_sale_date': "2010-06-17",
-                'vacant_percent': 50,
-                'num_vacant': 3,
-                'num_occupied': 3,
+                {
                 'block_group_name': 'SLOCK-2187',
                 'block_number': 'ITS-UI-LIKE',
                 'census_tract_number': '03',
@@ -358,7 +354,7 @@ def get_parcels(request):
             "owner_address": "123B Sesame Street, New York, NY",
             "contractor_name": "Biff"} ]
 
-        foreclosures= [2009, 2012, 2019]
+        foreclosures = [2009, 2012, 2020]
         parcel_tax_and_values = [{
             #'d3_year': 2018,
             'improved_value': '$10,000.00',
