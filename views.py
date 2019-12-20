@@ -308,10 +308,15 @@ def get_parcels(request):
                 'vacant_percent': 50,
                 'num_vacant': 3,
                 'num_occupied': 3,
+                'block_group_name': 'SLOCK-2187',
                 'block_number': 'ITS-UI-LIKE',
+                'census_tract_number': '03',
                 'prop_addr': '49 King',
                 'city_name': 'Detroit',
-                'prop_parcelnum': '01002779'}
+                'prop_parcelnum': '01002779',
+                'y_wgs84': 42.3584646,
+                'x_wgs84': -83.0624057,
+                }
                 ]
         voters = [{'d3_year': 2019, 'voter_birth_year': 1944},
             {'d3_year': 2019, 'voter_birth_year': 1947},
