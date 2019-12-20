@@ -186,7 +186,8 @@ def get_parcels(request):
     modification of the otherwise unchanged HTML page.
     """
     if not request.user.is_authenticated:
-        return {'error_message': "User is not logged in and therefore unable to get this data. Try the /login/ URL."}
+        return JsonResponse({'error_message': "User is not logged in and therefore unable to get this data. Try the /login/ URL.",
+            'reload': True })
 
     error_message = ''
     search_type = request.GET.get('search_type')

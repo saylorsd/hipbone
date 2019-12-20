@@ -114,40 +114,48 @@ table {
         var parcel_search_term = document.getElementsByName("address")[0].value;
         var button_value = $("button[type=submit][clicked=true]").val();
         $.ajax({
-        url: '/ajax/get_parcels/',
-        data: {
-            'parcel_search_term': parcel_search_term,
-            'search_type': button_value
-        },
-        dataType: 'json',
-        success: function (data) {
-            if (data.parcels.length > 0) {
-                $("#no_results").hide();
-                $("#prop_addr").html(data.parcels[0].prop_addr);
-                $("#city_name").html(data.parcels[0].city_name);
-                $("#prop_parcelnum").html(data.parcels[0].prop_parcelnum);
-                $("#last_sale_amount").html(data.parcels[0].last_sale_amount);
-                $("#last_sale_date").html(data.parcels[0].last_sale_date);
-                $("#vacancy_rate").html(data.parcels[0].vacant_percent);
-                populate_table(data.voters, "#voters-table");
-                populate_table(data.ownership, "#ownership-table");
-                populate_table(data.demolitions, "#demolitions-table");
-                populate_table(data.vacancy, "#vacancy-table");
-                populate_table(data.blight_violations, "#blight-violations-table");
-                populate_table(data.building_permits, "#building-permits-table");
-                populate_table(data.parcel_tax_and_values, "#parcel-tax-and-values-table");
-                populate_table(data.property_sales, "#property-sales-table");
+            url: '/ajax/get_parcels/',
+            data: {
+                'parcel_search_term': parcel_search_term,
+                'search_type': button_value
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (!("reload" in data)) {
+                    if (data.parcels.length > 0) {
+                        $("#no_results").hide();
+                        $("#prop_addr").html(data.parcels[0].prop_addr);
+                        $("#prop_parcelnum").html(data.parcels[0].prop_parcelnum);
+                        $("#city_name").html(data.parcels[0].city_name);
 
-                populate_table(data.tax_foreclosures, "#tax-foreclosures-table", "center-text");
-                var foreclosures_width = Object.keys(data.tax_foreclosures[0]).length; // Works under ES5+-capable browsers.
-                $("#tax-foreclosures-table th").attr('colspan',foreclosures_width);
+                        $("#block_number").html(data.parcels[0].block_number);
+                        $("#block_group_name").html(data.parcels[0].block_group_name);
+                        $("#census_tract_number").html(data.parcels[0].census_tract_number);
+                        $("#geographic_city_name").html(data.parcels[0].city_name);
+                        $("#latitude").html(data.parcels[0].y_wgs84);
+                        $("#longitude").html(data.parcels[0].x_wgs84);
+                        populate_table(data.voters, "#voters-table");
+                        populate_table(data.ownership, "#ownership-table");
+                        populate_table(data.demolitions, "#demolitions-table");
+                        populate_table(data.vacancy, "#vacancy-table");
+                        populate_table(data.blight_violations, "#blight-violations-table");
+                        populate_table(data.building_permits, "#building-permits-table");
+                        populate_table(data.parcel_tax_and_values, "#parcel-tax-and-values-table");
+                        populate_table(data.property_sales, "#property-sales-table");
 
-                activate_overlay(false,"overlay_data");
-                $("#one_result").show();
-            } else {
-                $("#no_results").show();
-                $("#one_result").hide();
-                activate_overlay(false,"overlay_data");
+                        populate_table(data.tax_foreclosures, "#tax-foreclosures-table", "center-text");
+                        var foreclosures_width = Object.keys(data.tax_foreclosures[0]).length; // Works under ES5+-capable browsers.
+                        $("#tax-foreclosures-table th").attr('colspan',foreclosures_width);
+
+                        activate_overlay(false,"overlay_data");
+                        $("#one_result").show();
+                    } else {
+                        $("#no_results").show();
+                        $("#one_result").hide();
+                        activate_overlay(false,"overlay_data");
+                    }
+                } else {
+                    location.reload(true);
                 }
             }
         });
