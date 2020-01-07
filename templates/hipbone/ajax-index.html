@@ -64,6 +64,19 @@
 table {
     table-layout: fixed; /* Make all tables default to having all columns be the same width. */
 }
+
+.hCollapsed:first-child span::before {
+  content: "+ ";
+}
+
+.hExpanded:first-child span::before {
+  content: "- ";
+}
+
+.dt thead {
+  cursor: pointer;
+}
+
 </style>
 {% endblock %}
 
@@ -169,8 +182,21 @@ table {
         e.preventDefault(); // Don't submit the form.
     });
 
-    $("thead").find("th").on("click", function() {       // When thead is clicked,
+
+    $(document).ready(function() {
+        //$('table').find('tr:gt(0)').hide();
+        $('.dt').find('tbody').toggle();
+        $('.dt thead').addClass('hCollapsed');
+    });
+
+    //$("thead").find("th").on("click", function() {
+    $("thead").on("click", function() {                  // When thead is clicked,
         $(this).closest("table").find("tbody").toggle(); // collapse the table.
+        if ($(this).hasClass('hCollapsed')) {
+            $(this).removeClass('hCollapsed').addClass('hExpanded');
+        } else {
+            $(this).removeClass('hExpanded').addClass('hCollapsed');
+        }
     });
 </script>
 {% endblock %}
