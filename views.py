@@ -64,6 +64,9 @@ def convert_to_standard_model(table, fields):
 def stack(table, name_by_field):
     return [{0 : name, 1 : row[field]} for row in table for field, name in name_by_field.items()]
 
+def group_by_record(table, name_by_field):
+    return [[{0 : name, 1 : row[field]} for field, name in name_by_field.items()] for row in table]
+
 def horizontalize_over_years(years, current_year):
     check_mark = "&#10003;"
     rows = []
@@ -381,6 +384,7 @@ def get_parcels(request):
     blight_violations_stacked = stack(blight_violations, blight_violations_config['name_by_field'])
     building_permits_stacked = stack(building_permits, building_permits_config['name_by_field'])
     demolitions_stacked = stack(demolitions, demolitions_config['name_by_field'])
+    ownership_grouped = group_by_record(ownership, ownership_config['name_by_field'])
     ownership_stacked = stack(ownership, ownership_config['name_by_field'])
     vacancy_stacked = stack(vacancy, vacancy_config['name_by_field'])
 
@@ -402,6 +406,7 @@ def get_parcels(request):
                 # to a variable with type date being not JSON-serializable.
             'voters': standard_voters,
             'ownership': ownership_stacked,
+            'ownership_grouped': ownership_grouped,
             'demolitions': demolitions_stacked,
             'vacancy': vacancy_stacked,
             'blight_violations': blight_violations_stacked,

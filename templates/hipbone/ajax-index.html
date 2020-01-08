@@ -122,6 +122,50 @@ table {
         };
     };
 
+    function populate_grouped_table(data, table_id, td_class) {
+        var thead = table_id + " thead";
+        var cols = $(thead).length;
+        $(table_id + " > tbody").empty(); // Try replacing this with $(table_id).find("tbody tr").remove();
+        var tbody = table_id + " tbody";
+        if (td_class) {
+            var td_class_str = " class='" + td_class + "'";
+            var td_class_str_first = " class='" + td_class + " divider' style='border-top: 3px solid black;'";
+        } else  {
+            var td_class_str = "";
+            var td_class_str_first = " class='divider' style='border-top: 3px solid black;'";
+        };
+        if (data.length == 0) {
+            $(tbody).append('<tr><td colspan="' + cols + '">No results.</td></tr>');
+        } else {
+            // Create tr elements for tbody from data (a JavaScript array with
+            // an arbitrary number of arrays of key-value pairs)
+            for (let record of data) {
+                let row_count = 0;
+                let record_count = 0;
+                for (let pair of record) {
+                    if (row_count == 0) {
+                        var row = "<tr class='bold'>";
+                    } else {
+                        var row = "<tr>";
+                    }
+                    for (var key of Object.keys(pair)) {
+                        row += "<td";
+                        if ((record_count != 0) || (row_count > 0)) {
+                            row += td_class_str;
+                        } else {
+                            row += td_class_str_first;
+                        };
+                        row += ">" + pair[key] + "</td>";
+                    };
+                    row += "</tr>";
+                    $(tbody).append(row);
+                    row_count++;
+                };
+                record_count++;
+            };
+        };
+    };
+
     function refresh_parcel() {
         activate_overlay(true,"overlay_data");
         var parcel_search_term = document.getElementsByName("address")[0].value;
@@ -148,7 +192,8 @@ table {
                         $("#latitude").html(data.parcels[0].y_wgs84);
                         $("#longitude").html(data.parcels[0].x_wgs84);
                         populate_table(data.voters, "#voters-table");
-                        populate_table(data.ownership, "#ownership-table");
+                        //populate_table(data.ownership, "#ownership-table");
+                        populate_grouped_table(data.ownership_grouped, "#ownership-table");
                         populate_table(data.demolitions, "#demolitions-table");
                         populate_table(data.vacancy, "#vacancy-table");
                         populate_table(data.blight_violations, "#blight-violations-table");
