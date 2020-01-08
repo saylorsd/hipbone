@@ -139,18 +139,18 @@ table {
         } else {
             // Create tr elements for tbody from data (a JavaScript array with
             // an arbitrary number of arrays of key-value pairs)
+            let record_count = 0;
             for (let record of data) {
                 let row_count = 0;
-                let record_count = 0;
                 for (let pair of record) {
-                    if (row_count == 0) {
-                        var row = "<tr class='bold'>";
-                    } else {
+                    //if (row_count == 0) {
+                    //    var row = "<tr class='bold'>";
+                    //} else {
                         var row = "<tr>";
-                    }
+                    //}
                     for (var key of Object.keys(pair)) {
                         row += "<td";
-                        if ((record_count != 0) || (row_count > 0)) {
+                        if ((record_count == 0) || (row_count > 0)) {
                             row += td_class_str;
                         } else {
                             row += td_class_str_first;
