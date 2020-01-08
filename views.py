@@ -307,7 +307,6 @@ def get_parcels(request):
     else:
         parcels = [
                 {
-                'block_group_name': 'SLOCK-2187',
                 'census_tract_number': '03',
                 'prop_addr': '49 King',
                 'city_name': 'Detroit',
