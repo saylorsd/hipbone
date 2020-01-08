@@ -286,7 +286,7 @@ def get_parcels(request):
             foreclosures = query_d3_table(foreclosures_config, d3_ids)
             foreclosures = [f['year_foreclosed'] for f in foreclosures]
             voters = query_voters(d3_ids)
-            vacancy = query_d3_table(vacancy_config, d3_ids)
+            vacancy = query_d3_table(vacancy_config, d3_ids, 'ORDER BY d3_year DESC, quarter')
             ownership = query_ownership(d3_ids)
             parcel_tax_and_values = query_parcel_tax_and_values(d3_ids)
             property_sales = query_property_sales(d3_ids)
