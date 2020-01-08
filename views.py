@@ -247,7 +247,7 @@ def get_parcels(request):
 
     parcel_tax_and_values_config = {'table_name': 'parcel_tax_and_values',
         'name_by_field': OrderedDict([
-            #('d3_year', "Year"),
+            ('d3_year', "Year"),
             ('improved_value', "Improved Value"), # $###.##
             ('land_value', "Land Value"),
             ('pre', "PRE"),
@@ -268,7 +268,7 @@ def get_parcels(request):
 
     vacancy_config = {'table_name': 'vacancy',
         'name_by_field': OrderedDict([
-            #('d3_year', "Year"),
+            ('d3_year', "Year"),
             ('quarter', "Quarter"),
             ('vacant_percent', "Percent Vacant"), # ##.#%
             ('num_vacant', "Number Vacant"),
