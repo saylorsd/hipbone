@@ -379,15 +379,14 @@ def get_parcels(request):
         voter['voter_age_by_years_end'] = current_year - voter['voter_birth_year']
     standard_voters = convert_to_standard_model(voters, ['d3_year', 'voter_age_by_years_end'])
 
-    blight_violations_stacked = stack(blight_violations, blight_violations_config['name_by_field'])
-    building_permits_stacked = stack(building_permits, building_permits_config['name_by_field'])
-    demolitions_stacked = stack(demolitions, demolitions_config['name_by_field'])
+    blight_violations_grouped = group_by_record(blight_violations, blight_violations_config['name_by_field'])
+    building_permits_grouped = group_by_record(building_permits, building_permits_config['name_by_field'])
+    demolitions_grouped = group_by_record(demolitions, demolitions_config['name_by_field'])
     ownership_grouped = group_by_record(ownership, ownership_config['name_by_field'])
-    ownership_stacked = stack(ownership, ownership_config['name_by_field'])
-    vacancy_stacked = stack(vacancy, vacancy_config['name_by_field'])
+    vacancy_grouped = group_by_record(vacancy, vacancy_config['name_by_field'])
 
-    parcel_tax_and_values_stacked = stack(parcel_tax_and_values, parcel_tax_and_values_config['name_by_field'])
-    property_sales_stacked = stack(property_sales, property_sales_config['name_by_field'])
+    parcel_tax_and_values_grouped = group_by_record(parcel_tax_and_values, parcel_tax_and_values_config['name_by_field'])
+    property_sales_grouped = group_by_record(property_sales, property_sales_config['name_by_field'])
 
     foreclosures_horizontal = horizontalize_over_years(foreclosures, current_year) # A possible
     # problem with this approach is that the JavaScript may not obtain the number of
@@ -403,15 +402,15 @@ def get_parcels(request):
                 # json_parcels commented out since it was throwing an error pertaining
                 # to a variable with type date being not JSON-serializable.
             'voters': standard_voters,
-            'ownership': ownership_stacked,
+
             'ownership_grouped': ownership_grouped,
-            'demolitions': demolitions_stacked,
-            'vacancy': vacancy_stacked,
-            'blight_violations': blight_violations_stacked,
-            'building_permits': building_permits_stacked,
+            'demolitions_grouped': demolitions_grouped,
+            'vacancy_grouped': vacancy_grouped,
+            'blight_violations_grouped': blight_violations_grouped,
+            'building_permits_grouped': building_permits_grouped,
             'tax_foreclosures': foreclosures_horizontal,
-            'parcel_tax_and_values': parcel_tax_and_values_stacked,
-            'property_sales': property_sales_stacked,
+            'parcel_tax_and_values_grouped': parcel_tax_and_values_grouped,
+            'property_sales_grouped': property_sales_grouped,
             'error_message': error_message,
             'output_format': 'html'
         }

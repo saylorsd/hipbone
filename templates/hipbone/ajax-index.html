@@ -189,14 +189,13 @@ table {
                         $("#latitude").html(data.parcels[0].y_wgs84);
                         $("#longitude").html(data.parcels[0].x_wgs84);
                         populate_table(data.voters, "#voters-table");
-                        //populate_table(data.ownership, "#ownership-table");
                         populate_grouped_table(data.ownership_grouped, "#ownership-table");
-                        populate_table(data.demolitions, "#demolitions-table");
-                        populate_table(data.vacancy, "#vacancy-table");
-                        populate_table(data.blight_violations, "#blight-violations-table");
-                        populate_table(data.building_permits, "#building-permits-table");
-                        populate_table(data.parcel_tax_and_values, "#parcel-tax-and-values-table");
-                        populate_table(data.property_sales, "#property-sales-table");
+                        populate_grouped_table(data.demolitions_grouped, "#demolitions-table");
+                        populate_grouped_table(data.vacancy_grouped, "#vacancy-table");
+                        populate_grouped_table(data.blight_violations_grouped, "#blight-violations-table");
+                        populate_grouped_table(data.building_permits_grouped, "#building-permits-table");
+                        populate_grouped_table(data.parcel_tax_and_values_grouped, "#parcel-tax-and-values-table");
+                        populate_grouped_table(data.property_sales_grouped, "#property-sales-table");
 
                         populate_table(data.tax_foreclosures, "#tax-foreclosures-table", "center-text");
                         var foreclosures_width = Object.keys(data.tax_foreclosures[0]).length; // Works under ES5+-capable browsers.
