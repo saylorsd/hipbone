@@ -56,7 +56,7 @@ def convert_to_standard_model(table, fields):
     to a different list-of-dicts form, where the keys are replaced by
     integers (0 through n-1, where n is the number of fields).
 
-    This ensures that the order of the JavaScript knows what order
+    This ensures that the JavaScript knows what order
     the fields should be in (since Python dicts do not by themselves
     preserve order)."""
     return [enumerated_row(row, fields) for row in table]
