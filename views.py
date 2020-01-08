@@ -357,7 +357,7 @@ def get_parcels(request):
 
         foreclosures = [2009, 2012, 2020]
         parcel_tax_and_values = [{
-            #'d3_year': 2018,
+            'd3_year': 2018,
             'improved_value': '$10,000.00',
             'land_value': '$3,000,000.00',
             'pre': 'LOBOT',
