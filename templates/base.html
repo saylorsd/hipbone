@@ -28,7 +28,10 @@
         margin-bottom: 0.5em;
         letter-spacing: 0.1em;
     }
-    .poppins { font-family: Poppins, Arial, sans-serif; }
+    .cross_site_title { font-family: Times New Roman, Georgia, serif;
+        font-size: 32px;
+        font-weight: 700;
+        text-transform: uppercase;}
     </style>
     <link rel="stylesheet" type="text/css" href="{% static 'hipbone/css/housing-portal-basic-style.css' %}">
     <style>
@@ -121,8 +124,12 @@
                 <P></P>
                 <P></P>
                 {% endblock %}
-                <a href="/" class="poppins">Housing Information Portal</a>
                 </span>
+                <div class="center-text">
+                    <div style="display:inline-block;">
+                        <a href="/" class="cross_site_title">Housing Information Portal</a>
+                    </div>
+                </div>
             </div>
         </header>
     <main>
