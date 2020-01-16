@@ -2,7 +2,6 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
-from django.conf import settings
 
 from .forms import LoginForm, AddressForm
 
@@ -10,13 +9,9 @@ import requests, json
 from datetime import datetime
 from collections import OrderedDict
 
-from .models import UserLoginActivity
 from .tracking_util import save_activity
-from .queries_v0 import query_db as query_db_v0, query_voters as query_voters_v0, aggregate_voters as aggregate_voters_v0
-from .queries import query_db_by_date, query_db, query_blight_violations, query_building_permits, query_demolitions, query_voters, query_ownership, query_parcel_tax_and_values, query_property_sales, aggregate_voters, query_d3_table
-from .parameters.local import PRODUCTION
-
-from django.contrib.auth.decorators import login_required
+from .queries import query_db, query_blight_violations, query_building_permits, query_demolitions, query_voters, query_ownership, query_parcel_tax_and_values, query_property_sales, aggregate_voters, query_d3_table
+from parameters.local import PRODUCTION
 
 from icecream import ic
 
@@ -307,12 +302,13 @@ def get_parcels(request):
     else:
         parcels = [
                 {
+                'd3_id': '18',
                 'census_tract_number': '03',
                 'prop_addr': '49 King',
                 'city_name': 'Detroit',
                 'prop_parcelnum': '01002779',
-                'y_wgs84': 42.3584646,
-                'x_wgs84': -83.0624057,
+                'y_wgs84': 42.38090737362023,
+                'x_wgs84':-83.07919430958162
                 }
                 ]
         voters = [{'d3_year': 2019, 'voter_birth_year': 1944},

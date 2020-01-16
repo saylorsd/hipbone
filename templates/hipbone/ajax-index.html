@@ -202,7 +202,10 @@ table {
                         $("#tax-foreclosures-table th").attr('colspan',foreclosures_width);
 
                         activate_overlay(false,"overlay_data");
+                        highlightParcel(data.parcels[0].d3_id,data.parcels[0].x_wgs84, data.parcels[0].y_wgs84);
+
                         $("#one_result").show();
+
                     } else {
                         $("#no_results").show();
                         $("#one_result").hide();
