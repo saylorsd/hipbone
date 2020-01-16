@@ -11,7 +11,7 @@ from collections import OrderedDict
 
 from .tracking_util import save_activity
 from .queries import query_db, query_blight_violations, query_building_permits, query_demolitions, query_voters, query_ownership, query_parcel_tax_and_values, query_property_sales, aggregate_voters, query_d3_table
-from parameters.local import PRODUCTION
+from .parameters.local import PRODUCTION
 
 from icecream import ic
 
