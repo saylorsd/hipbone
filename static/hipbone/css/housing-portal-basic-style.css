@@ -141,3 +141,11 @@ table, th, td {
 	max-width: 400px;
 	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
+
+.ui-tabs-tab {
+	background-color: rgb(100, 100, 100) !important;
+}
+
+.ui-tabs-active {
+	background-color: rgb(47, 47, 47) !important;
+}
