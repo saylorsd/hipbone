@@ -98,7 +98,11 @@ function setCartoSource(map, source) {
  * @param lat? - latitude
  */
 function highlightParcel(map, parcelId, lng, lat) {
-    let searchParcelId = parcelId.slice(-1) === '.' ? parcelId : parcelId + '.';
+    console.log('dev:', DEV);
+    let searchParcelId;
+    if(DEV) searchParcelId = parcelId.slice(-1) === '.' ? parcelId : parcelId + '.';
+    else searchParcelId = parcelId;
+
     map.setFilter('parcel-highlight', ['==', 'prop_parcelnum', searchParcelId]);
     if (lng && lat) {
         map.setCenter([lng, lat]);
