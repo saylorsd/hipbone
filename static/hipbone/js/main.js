@@ -7,6 +7,8 @@ const CARTO_SQL =`SELECT min(cartodb_id) as id, min(the_geom) as the_geom, min(t
                     FROM wprdc.d3_parcels 
                     GROUP BY d3_id, prop_addr, prop_parcelnum`;
 
+// todo: remove this eventually, i'm using this for a hack fix I have with matching parcel data.
+const DEV = ['localhost', '127.0.0.1'].includes(window.location.hostname);
 
 let dataMap, searchMap;
 
