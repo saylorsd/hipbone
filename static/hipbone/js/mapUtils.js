@@ -87,6 +87,22 @@ function setCartoSource(map, source) {
     map.addSource('parcels', source);
 }
 
+/**
+ * Creates the content for popups
+ * @param parcelId
+ * @param data
+ * @returns {function}
+ */
+function makePopupContentGenerator(useButton) {
+    return function (addr) {
+        console.log('GENERATING', useButton, addr);
+        return `<div>
+                  <h4>${addr}</h4>
+                  ${useButton ? '<button id="get-data-btn">Get Data</button>' : ''}
+                </div>`
+    }
+}
+
 
 /**
  * Highlights a parcel on the map by seting a filter on the highlight layer.
@@ -98,9 +114,8 @@ function setCartoSource(map, source) {
  * @param lat? - latitude
  */
 function highlightParcel(map, parcelId, lng, lat) {
-    console.log('dev:', DEV);
     let searchParcelId;
-    if(DEV) searchParcelId = parcelId.slice(-1) === '.' ? parcelId : parcelId + '.';
+    if (DEV) searchParcelId = parcelId.slice(-1) === '.' ? parcelId : parcelId + '.';
     else searchParcelId = parcelId;
 
     map.setFilter('parcel-highlight', ['==', 'prop_parcelnum', searchParcelId]);
@@ -129,7 +144,7 @@ function highlightBorder(map, parcelId) {
  * @param curPopup - mapboxgl popup
  * @returns {function(...[*]=)}
  */
-function showPopup(map, curPopup) {
+function showPopup(map, curPopup, contentGenerator) {
     return function (e) {
         if (e.features.length) {
             let feature = e.features[0];
@@ -138,7 +153,7 @@ function showPopup(map, curPopup) {
             highlightBorder(map, feature.properties.prop_parcelnum);
 
             curPopup.setLngLat(e.lngLat)
-                .setHTML('<h4>' + feature.properties.prop_addr + '</h4>')
+                .setHTML(contentGenerator(feature.properties.prop_addr))
                 .addTo(map)
 
         } else {
@@ -165,25 +180,35 @@ function hidePopup(map, curPopup) {
  * Allows the map `map` to search for parcels on click.
  * @param map - mapboxgl map
  */
-function attachClickSearchToMap(map) {
+function attachClickSearchToMap(map, hoveredPopup) {
+    let detailedPopup = new mapboxgl.Popup({closeOnClick: false});
+    hidePopup(map, hoveredPopup);
+    // add lick listener for search
     map.on('click', 'parcel-fill', function (e) {
         if (e.features.length) {
             let feature = e.features[0];
-            // search by parcel id
-            $.ajax({
+            let parcelId = feature.properties.prop_parcelnum;
+            // highlight it on the map
+            highlightParcel(map, feature.properties.prop_parcelnum);
+            showPopup(map, detailedPopup, makePopupContentGenerator(true))(e);
+
+            // attach listener for get data button
+                        // search by parcel id
+            $('#get-data-btn').click( function() {
+                            $.ajax({
                 url: '/ajax/get_parcels/',
                 data: {
-                    parcel_search_term: feature.properties.prop_parcelnum,
+                    parcel_search_term: parcelId,
                     search_type: 'parcel'
                 },
                 dataType: 'json',
-                success: handleResponseData
+                success: function(data){
+                    hidePopup(map, detailedPopup)();
+                    handleResponseData(data);
+                }
             });
-            // highlight it on the map
-            highlightParcel(map, feature.properties.prop_parcelnum)
-
+            })
         }
-
     })
 }
 
@@ -191,7 +216,7 @@ function attachClickSearchToMap(map) {
 /**
  * Creates a new mapboxgl map.  Applies functions in func on the map
  * @param mapDiv - the div to attach the generated map
- * @param funcs {[function({mapboxgl.Map}, ...)]} - array of functions ot apply to the map
+ * @param funcs {[function({mapboxgl.Map}, {mapboxgl.Popup)]} - array of functions ot apply to the map
  * @returns {mapboxgl.Map}
  */
 function instantiateMap(mapDiv, funcs = []) {
@@ -210,10 +235,7 @@ function instantiateMap(mapDiv, funcs = []) {
                 map.addLayer(highlightLayer);
                 map.addLayer(lineLayer);
                 map.addLayer(hoverLayer);
-                map.on('click', 'parcel-fill', function (e) {
-                    console.log(e, e.features)
-                });
-                map.on('mousemove', 'parcel-fill', showPopup(map, popup));
+                map.on('mousemove', 'parcel-fill', showPopup(map, popup, makePopupContentGenerator(false)));
                 map.on('mouseleave', 'parcel-fill', hidePopup(map, popup));
             },
             function (err) {
@@ -226,6 +248,6 @@ function instantiateMap(mapDiv, funcs = []) {
             map.resize();
         })
     });
-    funcs.map(func => func(map))
+    funcs.map(func => func(map, popup));
     return map;
 }
