@@ -12,8 +12,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -24,7 +24,7 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -62,7 +62,7 @@ table, th, td {
     padding-bottom: 20px;
 	background-color: #2f2f2f;
 	color: #00698c;
-} 
+}
 
 #header a:link, a:visited {color: #00698c; text-decoration:underline;}
 #header a:hover {color: #ffffff;}
@@ -72,7 +72,7 @@ table, th, td {
 	padding: 40px;
 	background-color: #ffffff;
 	color: #2f2f2f;
-} 
+}
 
 #maps a:link, a:visited {color: #20698a; text-decoration:underline;}
 #maps a:hover {color:#6596cf;}
@@ -82,7 +82,7 @@ table, th, td {
 	padding: 40px;
 	background-color: #d1d2d4;
 	color: #2f2f2f;
-} 
+}
 
 #info a:link, a:visited {color: #2f2f2f; text-decoration:none; font-variant:small-caps; font-size:20px;}
 #info a:hover {color:#ffffff;}
@@ -92,7 +92,7 @@ table, th, td {
 	padding: 40px;
 	background-color: #2f2f2f ;
 	color: #ffffff;
-} 
+}
 
 #studies a:link, a:visited {color: #6596cf; text-decoration:underline;}
 #studies a:hover {color:#ffffff;}
@@ -102,7 +102,7 @@ table, th, td {
 	padding: 40px;
 	background-color: #ffffff;
 	color: #2f2f2f;
-} 
+}
 
 #resources a:link, a:visited {color: #20698a; text-decoration:underline;}
 #resources a:hover {color:#6596cf;}
@@ -112,7 +112,7 @@ table, th, td {
 	padding: 40px;
 	background-color: #ecba66;
 	color: #2f2f2f;
-} 
+}
 
 #report a:link, a:visited {color: #2f2f2f; text-decoration:underline; text-transform:uppercase;}
 #report a:hover {color:#ffffff;}
@@ -122,7 +122,7 @@ table, th, td {
 	padding: 40px;
 	background-color: #ffffff;
 	color: #2f2f2f;
-} 
+}
 
 #footer a:link, a:visited {color: #20698a; text-decoration:underline;}
 #footer a:hover {color:#6596cf;}
@@ -130,4 +130,14 @@ table, th, td {
 #map {
     height: 300px;
     width: 100%;
+}
+#searchMap {
+    height: 300px;
+    width: 100%;
+}
+
+.mapboxgl-popup {
+	color: black;
+	max-width: 400px;
+	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
