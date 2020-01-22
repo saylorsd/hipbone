@@ -3,13 +3,7 @@ function activate_overlay(bool, element_id) {
 }
 
 $(document).ready(function () {
-    $("form").submit(function () {
-        var val = $("button[type=submit][clicked=true]").val();
-    });
-    $("form button[type=submit]").click(function () {
-        $("button[type=submit]", $(this).parents("form")).removeAttr("clicked");
-        $(this).attr("clicked", "true");
-    });
+
 });
 
 function populate_table(data, table_id, td_class) {
@@ -106,14 +100,6 @@ function refresh_parcel() {
     });
 }
 
-$("#no_results").hide();
-$("#one_result").hide();
-
-$("form").submit(function (e) {
-    refresh_parcel();
-    e.preventDefault(); // Don't submit the form.
-});
-
 
 $(document).ready(function () {
     //$('table').find('tr:gt(0)').hide();
@@ -123,11 +109,28 @@ $(document).ready(function () {
     mapboxgl.accessToken = 'pk.eyJ1IjoibmVzc2JvdCIsImEiOiJjazU3NnNrb2MwMDcyM2pvNjYzM2hxbDdnIn0.Ip9ledWRI3KfL_FxAykCYA';
     dataMap = instantiateMap('map');
     searchMap = instantiateMap('searchMap', [attachClickSearchToMap]);
-    $('#show-map-btn-section').hide()
+    $('#show-map-btn-section').hide();
     $('#show-map-btn-section').on('click', function () {
         $('#searchMap-section').show();
         $('#show-map-btn-section').hide();
     })
+
+    $("#no_results").hide();
+    $("#one_result").hide();
+
+    $("form").submit(function (e) {
+        refresh_parcel();
+        e.preventDefault(); // Don't submit the form.
+    });
+
+    $("form").submit(function () {
+        var val = $("button[type=submit][clicked=true]").val();
+    });
+    $("form button[type=submit]").click(function () {
+        $("button[type=submit]", $(this).parents("form")).removeAttr("clicked");
+        $(this).attr("clicked", "true");
+    });
+
 });
 
 //$("thead").find("th").on("click", function() {
