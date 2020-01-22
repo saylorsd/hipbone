@@ -249,5 +249,6 @@ function instantiateMap(mapDiv, funcs = []) {
         })
     });
     funcs.map(func => func(map, popup));
+    map.addControl(new mapboxgl.NavigationControl());
     return map;
 }

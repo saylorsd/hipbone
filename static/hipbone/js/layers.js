@@ -45,8 +45,8 @@ const fillLayer = {
     'source-layer': 'parcels',
     type: 'fill',
     paint: {
-        'fill-color': '#627BC1',
-        'fill-opacity': 0.5
+        'fill-color': '#4C8EB4',
+        'fill-opacity': 0.2
     }
 };
 
@@ -56,8 +56,8 @@ const highlightLayer = {
     'source-layer': 'parcels',
     type: 'fill',
     paint: {
-        'fill-color': '#272cc1',
-        'fill-opacity': 1
+        'fill-color': '#58BFAC',
+        'fill-opacity': 0.5
     },
     filter: ['==', 'prop_parcelnum', '']
 };
