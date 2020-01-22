@@ -15,7 +15,7 @@ let dataMap, searchMap;
 const mapSettings = {
     style: 'mapbox://styles/mapbox/streets-v11',
     center: [-83.07919430958162, 42.38090737362023],
-    zoom: 16,
+    zoom: 14.5,
     interactive: true,
     minZoom: 12,
 };

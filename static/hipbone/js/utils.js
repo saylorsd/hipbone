@@ -26,10 +26,14 @@ function handleResponseData(data) {
             highlightParcel(dataMap, data.parcels[0].prop_parcelnum, data.parcels[0].x_wgs84, data.parcels[0].y_wgs84);
 
             $("#one_result").show();
+            $('#show-map-btn-section').show();
+            $('#searchMap-section').hide();
 
         } else {
             $("#no_results").show();
             $("#one_result").hide();
+            $('#show-map-btn-section').hide();
+            $('#searchMap-section').show();
             activate_overlay(false, "overlay_data");
         }
     } else {
