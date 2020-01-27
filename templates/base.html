@@ -1,171 +1,85 @@
 {% load static %}<!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>{% block title %}{% endblock %}</title>
-    <style>
-    @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
-    @import url('https://fonts.googleapis.com/css?family=Didact+Gothic&display=swap');
-    /*FONTS*/
-    /*broadly applies to entire page*/
-    * { font-family: Poppins, Arial, sans-serif; }
 
-    p { font-family: Poppins, Arial, sans-serif; font-size:14px; }
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'hipbone/css/housing-portal-basic-style.css' %}">
+  <!--link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"-->
+  <link rel="stylesheet" href="{% static 'hipbone/css/jquery-ui.css' %}">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-    h1 { text-transform: uppercase;
-        font-family: "Didact Gothic", "Open Sans", sans-serif;
-        font-size: 24px;
-        font-weight: 500;
-        margin-bottom: 10px;}
+  <!-- Map business -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet"/>
+  <script src="{% static 'hipbone/js/mapUtils.js' %}"></script>
+  <script src="{% static 'hipbone/js/utils.js' %}"></script>
+  <script src="{% static 'hipbone/js/layers.js' %}"></script>
+  <script src="{% static 'hipbone/js/index.js' %}"></script>
+  <script src="{% static 'hipbone/js/mapMain.js' %}"></script>
 
-    /*style for "p" only renders correctly when typed above and below "h1"*/
-    /*designer has written it off as mysterious witchcraft*/
-    p { font-family: Poppins, Arial, sans-serif; font-size:14px; }
-    .search-header { text-transform: uppercase;
-        font-size: 20px;
-        font-weight: 800;
-        padding-top: 2em;
-        margin-bottom: 0.5em;
-        letter-spacing: 0.1em;
-    }
-    .cross_site_title { font-family: Times New Roman, Georgia, serif;
-        font-size: 32px;
-        font-weight: 700;
-        text-transform: uppercase;}
-    </style>
-    <link rel="stylesheet" type="text/css" href="{% static 'hipbone/css/housing-portal-basic-style.css' %}">
-    <style>
-    /* Footer CSS-Grid CSS */
-    .wrapper {
-      display: grid;
-      grid-template-columns: 66% 17% 17%;
-      grid-gap: 10px;
-      background-color: #fff;
-      color: #444;
-    }
+  <script>
+      $(function () {
+          $("#tabs").tabs();
+      });
+  </script>
+  {% block stylesheet %}{% endblock %}
+</head>
+<body>
+<div id="main-flex-container">
 
-    .box {
-      background-color: #fff;
-      color: #000;
-      border-radius: 5px;
-      padding: 20px;
-      font-size: 100%;
-    }
-
-    .autosize {
-        height: 100%;
-        width: 100%;
-        object-fit: contain;
-    }
-    /* END Footer CSS-Grid CSS */
-    .center {
-      margin: 0 auto;
-      width: 70%;
-      border: 0px solid black;
-      padding: 10px;
-    }
-    .center-text {
-        text-align: center;
-        vertical-align: middle;
-    }
-    .bold {
-        font-weight: bold;
-    }
-    #orange-result-box {
-        margin: 10px;
-        padding: 10px;
-        border: 3px solid #f2ba5c;
-    }
-
-    /* CSS for tables on results page */
-    .row {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      width: 100%;
-    }
-
-    .fcolumn {
-      display: flex;
-      flex-direction: column;
-      flex-basis: 100%;
-      flex: 1;
-      justify-content: space-between;
-     }
-
-    .vertically-align {
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    </style>
-    <!--link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"-->
-    <link rel="stylesheet" href="{% static 'hipbone/css/jquery-ui.css' %}">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <!-- Map business -->
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
-    <script src="{% static 'hipbone/js/mapUtils.js' %}"></script>
-    <script src="{% static 'hipbone/js/utils.js' %}"></script>
-    <script src="{% static 'hipbone/js/layers.js' %}"></script>
-    <script src="{% static 'hipbone/js/index.js' %}"></script>
-    <script src="{% static 'hipbone/js/mapMain.js' %}"></script>
-
-    <script>
-    $( function() {
-        $( "#tabs" ).tabs();
-    } );
-    </script>
-    {% block stylesheet %}{% endblock %}
-  </head>
-    <body>
-        <header>
-            <div id="header">
+  <header>
+    <div id="header">
                 <span class="user">
                 {% block login-status %}
-                    {% if request.user.is_authenticated %}
-                        Logged in as {{ request.user.username }}.
-                        <a href="{% url "logout" %}">Log out</a>.
-                    {% else %}
-                        <a href="{% url "login" %}">Log in</a>.
-                    {% endif %}
-                <P></P>
-                <P></P>
+                  {% if request.user.is_authenticated %}
+                    Logged in as {{ request.user.username }}.
+                    <a href="{% url "logout" %}">Log out</a>.
+                  {% else %}
+                    <a href="{% url "login" %}">Log in</a>.
+                  {% endif %}
+                  <P></P>
+                  <P></P>
                 {% endblock %}
                 </span>
-                <div class="center-text">
-                    <div style="display:inline-block;">
-                        <a href="/" class="cross_site_title">Housing Information Portal</a>
-                    </div>
-                </div>
-            </div>
-        </header>
-    <main>
-      <div id="content">
-          {% block content %}
-          {% endblock %}
-      </div>
-    </main>
-    <footer>
-        <div id="footer">
-            {% if output_format == 'html' %}
-            <div class="wrapper">
-                <div class="box a">{% block footer_message %}
-                Send us feedback about this tool through our <a href="https://datadrivendetroit.org/askd3/">AskD3 site</a>.
-                {% endblock %}</div>
-                <div class="box b"><img class="autosize" src="{% static 'hipbone/images/D3_logo.png' %}"></div>
-                <div class="box c"><img class="autosize" src="{% static 'hipbone/images/ask-d3-logo.png' %}"></div>
-            </div>
-            {% else %}
-                <div style="float:left; width:50%;" class="vertically-align">Send us feedback about this tool through our <a href="https://datadrivendetroit.org/askd3/">AskD3 site</a>.</div>
-                <div style="float:left; width:25%;" class="vertically-align"><img height="50px" width="auto" src="{% static 'hipbone/images/D3_logo.png' %}"></div>
-                <div style="float:right; width:25%;" class="vertically-align"><img height="150px" width="auto" src="{% static 'hipbone/images/ask-d3-logo.png' %}"</div>
-            </table>
-            {% endif %}
+      <div class="center-text">
+        <div style="display:inline-block;">
+          <a href="/" class="cross_site_title">Housing Information Portal</a>
         </div>
-    </footer>
-    {% block javascript %}{% endblock %}
-  </body>
+      </div>
+    </div>
+  </header>
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+</div>
+
+  <footer>
+    <div id="footer">
+      {% if output_format == 'html' %}
+        <div class="wrapper">
+          <div class="box a">{% block footer_message %}
+            Send us feedback about this tool through our <a href="https://datadrivendetroit.org/askd3/">AskD3 site</a>.
+          {% endblock %}</div>
+          <div class="box b"><img class="autosize" src="{% static 'hipbone/images/D3_logo.png' %}"></div>
+          <div class="box c"><img class="autosize" src="{% static 'hipbone/images/ask-d3-logo.png' %}"></div>
+        </div>
+      {% else %}
+        <div style="float:left; width:50%;" class="vertically-align">Send us feedback about this tool through our <a
+            href="https://datadrivendetroit.org/askd3/">AskD3 site</a>.
+        </div>
+        <div style="float:left; width:25%;" class="vertically-align"><img height="50px" width="auto"
+                                                                          src="{% static 'hipbone/images/D3_logo.png' %}">
+        </div>
+        <div style="float:right; width:25%;" class="vertically-align"><img height="150px" width="auto"
+                                                                           src="{% static 'hipbone/images/ask-d3-logo.png' %}"
+        </div>
+        </table>
+      {% endif %}
+    </div>
+</footer>
+{% block javascript %}{% endblock %}
+</body>
 </html>

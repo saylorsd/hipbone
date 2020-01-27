@@ -17,7 +17,7 @@ function populate_table(data, table_id, td_class) {
         var td_class_str = "";
     }
 
-    if (data.length == 0) {
+    if (data.length === 0) {
         $(tbody).append('<tr><td colspan="' + cols + '">No results.</td></tr>');
     } else {
         // Create tr elements for tbody from data (a JavaScript object with
@@ -48,7 +48,7 @@ function populate_grouped_table(data, table_id, td_class) {
         var td_class_str_first = " class='divider' style='border-top: 3px solid black;'";
     }
 
-    if (data.length == 0) {
+    if (data.length === 0) {
         $(tbody).append('<tr><td colspan="' + cols + '">No results.</td></tr>');
     } else {
         // Create tr elements for tbody from data (a JavaScript array with
@@ -103,8 +103,8 @@ function refresh_parcel() {
 
 $(document).ready(function () {
     //$('table').find('tr:gt(0)').hide();
-    $('.dt').find('tbody').toggle();
-    $('.dt thead').addClass('hCollapsed');
+    // $('.dt').find('tbody').toggle();
+    $('.dt thead').addClass('hExpanded');
 
     mapboxgl.accessToken = 'pk.eyJ1IjoibmVzc2JvdCIsImEiOiJjazU3NnNrb2MwMDcyM2pvNjYzM2hxbDdnIn0.Ip9ledWRI3KfL_FxAykCYA';
     dataMap = instantiateMap('map');
@@ -130,15 +130,14 @@ $(document).ready(function () {
         $("button[type=submit]", $(this).parents("form")).removeAttr("clicked");
         $(this).attr("clicked", "true");
     });
+    //$("thead").find("th").on("click", function() {
+    $("thead").on("click", function () {                  // When thead is clicked,
+        $(this).closest("table").find("tbody").toggle(); // collapse the table.
+        if ($(this).hasClass('hCollapsed')) {
+            $(this).removeClass('hCollapsed').addClass('hExpanded');
+        } else {
+            $(this).removeClass('hExpanded').addClass('hCollapsed');
+        }
+    });
 
-});
-
-//$("thead").find("th").on("click", function() {
-$("thead").on("click", function () {                  // When thead is clicked,
-    $(this).closest("table").find("tbody").toggle(); // collapse the table.
-    if ($(this).hasClass('hCollapsed')) {
-        $(this).removeClass('hCollapsed').addClass('hExpanded');
-    } else {
-        $(this).removeClass('hExpanded').addClass('hCollapsed');
-    }
 });

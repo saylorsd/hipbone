@@ -208,7 +208,6 @@ table, th, td {
 }
 
 
-
 /*Section -1: Error Reports */
 #error {
     padding: 10px;
@@ -224,14 +223,28 @@ table, th, td {
 
 /* Background image */
 .background-image {
-    display: flex;
-    flex-direction: column;
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 70vh;
+    height: 100%;
+    opacity: 0.5;
+    z-index: -1;
+    flex-grow: 1;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
     background-image: url(/static/hipbone/images/search-header_house-search.png);
+
+}
+
+
+#hero {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
 }
 
 .search_button {
@@ -263,7 +276,6 @@ table, th, td {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 100%;
     width: 100%;
     opacity: 1;
     transition: .5s ease;
@@ -288,4 +300,139 @@ table {
 
 .dt thead {
     cursor: pointer;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    height: 100%;
+}
+
+main {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    position: relative;
+}
+
+#main-flex-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Footer CSS-Grid CSS */
+.wrapper {
+    display: grid;
+    grid-template-columns: 66% 17% 17%;
+    grid-gap: 10px;
+    background-color: #fff;
+    color: #444;
+}
+
+.box {
+    background-color: #fff;
+    color: #000;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 100%;
+}
+
+.autosize {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+/* END Footer CSS-Grid CSS */
+.center {
+    margin: 0 auto;
+    width: 70%;
+    border: 0px solid black;
+    padding: 10px;
+}
+
+.center-text {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+#orange-result-box {
+    margin: 10px;
+    padding: 10px;
+    border: 3px solid #f2ba5c;
+    background: rgba(255,255,255, 0.2);
+}
+
+/* CSS for tables on results page */
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.fcolumn {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    justify-content: space-between;
+}
+
+.vertically-align {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Didact+Gothic&display=swap');
+/*FONTS*/
+/*broadly applies to entire page*/
+* {
+    font-family: Poppins, Arial, sans-serif;
+}
+
+p {
+    font-family: Poppins, Arial, sans-serif;
+    font-size: 14px;
+}
+
+h1 {
+    text-transform: uppercase;
+    font-family: "Didact Gothic", "Open Sans", sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+/*style for "p" only renders correctly when typed above and below "h1"*/
+/*designer has written it off as mysterious witchcraft*/
+p {
+    font-family: Poppins, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.search-header {
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: 800;
+    padding-top: 2em;
+    margin-bottom: 0.5em;
+    letter-spacing: 0.1em;
+}
+
+.cross_site_title {
+    font-family: Times New Roman, Georgia, serif;
+    font-size: 32px;
+    font-weight: 700;
+    text-transform: uppercase;
 }

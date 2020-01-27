@@ -2,40 +2,42 @@
 {% block title %}Housing Portal{% endblock %}
 
 {% block content %}
-  <div class="background-image">
-    <div class="center-text search-header">Search by parcel ID or address</div>
-    <div class="center"><p><small>{{ msg }}</small></p></div>
-    <div id="error"><p>{{ error_message }}</p></div>
-    <div id="search-form-wrapper">
-      <form id="parcel_search_form" method="post">
-        {% csrf_token %}
-        <!--{{ address_form.non_field_errors }}-->
-        <div class="center" style="position:relative;">
-          <p align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lobortis vulputate orci non
-            posuere.</p>
-          <br>
-          <input type="text" name="address" value="" required="" id="id_address">
-          <!--input class="address_form" type="text" name="address" value="" maxlength="255" required="" id="id_address"-->
-          <br>
-          <!--{{ address_form.address.errors }}<br>
+  <div id="hero">
+    <div class="background-image"></div>
+      <h2 class="center-text search-header">Search by parcel ID or address</h2>
+      <div class="center"><p><small>{{ msg }}</small></p></div>
+      <div id="error"><p>{{ error_message }}</p></div>
+      <div id="search-form-wrapper">
+        <form id="parcel_search_form" method="post">
+          {% csrf_token %}
+          <!--{{ address_form.non_field_errors }}-->
+          <div class="center" style="position:relative;">
+            <p align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lobortis vulputate orci non
+              posuere.</p>
+            <br>
+            <input type="text" name="address" value="" required="" id="id_address">
+            <!--input class="address_form" type="text" name="address" value="" maxlength="255" required="" id="id_address"-->
+            <br>
+            <!--{{ address_form.address.errors }}<br>
                     {{ address_form.address }}<br>-->
-          <span>
+            <span>
                     <button class="search_button" id="address_button" name="search_type" type="submit" value="address">By Address</button>
                     <button class="search_button align_right" id="parcel_id_button" name="search_type" type="submit"
                             value="parcel">By Parcel ID</button>
                 </span>
+          </div>
+        </form>
+        <div id="searchMap-section" class="center" style="flex: 1; display: flex; flex-direction: column;">
+          <p align="center">Vestibulum ultricies dictum dolor, ut maximus odio dignissim ut.</p>
+          <div id="searchMap"></div>
         </div>
-      </form>
-      <div id="searchMap-section" class="center" style="flex: 1; display: flex; flex-direction: column;">
-        <p align="center">Vestibulum ultricies dictum dolor, ut maximus odio dignissim ut.</p>
-        <div id="searchMap"></div>
-      </div>
-      <div class="center" style="display: flex; align-content: center; justify-content: center;"
-           id="show-map-btn-section">
-        <button class="search_button" id="show-map-btn" style="margin: 0 auto;">Search by Map</button>
-      </div>
+        <div class="center" style="display: flex; align-content: center; justify-content: center;"
+             id="show-map-btn-section">
+          <button class="search_button" id="show-map-btn" style="margin: 0 auto;">Search by Map</button>
+        </div>
     </div>
   </div>
+
   <br><br>
   {% include "hipbone/ajax-results.html" %}
 {% endblock %}
